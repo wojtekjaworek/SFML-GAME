@@ -1,49 +1,30 @@
 #pragma once
+#include "player.h"
+
+class Game {
+
+private:
+	sf::RenderWindow* window; //pointer to window
+
+	//player 
+	Player* player; //pointer to player to control it on the screen
 
 
-#include <SFML/Graphics.hpp>
-#include <SFML/System.hpp>
-#include <SFML/Window.hpp>
-#include <SFML/Network.hpp>
-#include <SFML/Audio.hpp>
-/*
-Main game class
-*/
-
-class game
-{
-
-private: 
-	//functions and variables that needs to be private
-
-
-	sf::RenderWindow* window; // pointer to window
-	sf::Event ev;
-	sf::VideoMode VMode;
-	
-	sf::Sprite obstacles;
-	sf::Texture obstacleTexture;
-
-	void initVariables(); 
+	//private functions
 	void initWindow();
-	void initObstacles();
+	void initPlayer();
 
 
-public: // constructors & destructors
-	game();
-	virtual ~game();
 
+public:
 
-	//accessors
+	Game();
+	virtual ~Game();
 
-	const bool checkIfWindowIsOpen() const;
+	//public functions
+	void run();
 
-	// functions
-	void getEvents();
 	void update();
 	void render();
-	
-
-
 
 };

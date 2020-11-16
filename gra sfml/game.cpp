@@ -1,99 +1,76 @@
 #include "game.h"
 
-//constructor & destructors 
-game::game() {
 
-	this->initVariables();
-	this->initWindow();
-	this->initObstacles();
-
-
-}
-
-game::~game() {
-
-	delete this->window; // prevent memory leaks
+//private functions
+void Game::initWindow()
+{
+	this->window = new sf::RenderWindow(sf::VideoMode(800,600), "Redline Racing", sf::Style::Close | sf::Style::Titlebar);
+	this->window->setFramerateLimit(60);
+	this->window->setVerticalSyncEnabled(false);
 
 }
 
-//functions from game.h
+void Game::initPlayer()
+{
+	this->player = new Player();
+}
 
 
-//public functions from game.h
+//public functions 
+void Game::run()
+{
+while (this->window->isOpen()) {
+	this->update();
+	this->render();
+}
 
+}
 
-void game::getEvents() {
-
-	while (this->window->pollEvent(this->ev)) {
-		switch (this->ev.type) {
-		case sf::Event::Closed :
-
-
+void Game::update()
+{
+	sf::Event event;
+	while (this->window->pollEvent(event)) {
+		if (event.Event::type == sf::Event::Closed) {
 			this->window->close();
-			break;
-		case sf::Event::KeyPressed:
-			if (this->ev.key.code == sf::Keyboard::Escape) {
-				this->window->close();
-				break;
-			}
 		}
+	}
+
+	//move player
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
+		this->player->move(0.f, 0.f);
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
+		this->player->move(0.f, 0.f);
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+		this->player->move(1.f, 0.f);
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+		this->player->move(-1.f, 0.f);
 	}
 }
 
-
-void game::update() {
-
-	this->getEvents();
-
-}
-
-void game::render() {
-
-	//clear existing frame
+void Game::render()
+{
 	this->window->clear();
 
 
-	//draw game
+	//draw game here
+	this->player->render(*this->window); // decide where te render player,in this case: on the window (which is a pointer so * )
 
-
-
-
-
-	this->window->draw(this->obstacles);
 	this->window->display();
-	
-
 }
 
 
-//accessors from game.h
-const bool game::checkIfWindowIsOpen() const
+//constructor &destructor
+Game::Game()
 {
-	return this->window->isOpen();
+	this->initWindow();
+	this->initPlayer();
 }
 
-
-//private functions from game.h
-void game::initVariables() {
-
-	this->window == nullptr;
-	this->obstacleTexture.loadFromFile("test.jpg"); 
-
-}
-
-void game::initWindow() {
-
-
-	this->VMode.height = 480;
-	this-> VMode.width = 640;
-	this->window = new sf::RenderWindow(this->VMode, "Redline Racing", sf::Style::Titlebar | sf::Style::Close);
-	this->window->setFramerateLimit(60);
-}
-
-void game::initObstacles() {
-
-	this->obstacles.setTexture(this->obstacleTexture);
-	this->obstacles.setPosition(100.f,100.f);
-
-
+Game::~Game()
+{
+	delete this->window;
+	delete this->player;
 }

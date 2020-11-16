@@ -1,9 +1,7 @@
-﻿  game.cpp
-C:\Users\jawor\source\repos\gra sfml\gra sfml\game.cpp(79,15): warning C4553: „==”: Wynik wyrażenia nie jest używany; czy chodziło Ci o „=”?
-  main.cpp
+﻿  player.cpp
   Trwa generowanie kodu
-  8 of 103 functions ( 7.8%) were compiled, the rest were copied from previous compilation.
+  4 of 118 functions ( 3.4%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
     0 functions had inline decision re-evaluated but remain unchanged
   Zakończono generowanie kodu
-  gra sfml.vcxproj -> C:\Users\jawor\source\repos\gra sfml\x64\Release\gra sfml.exe
+  gra sfml.vcxproj -> C:\Users\jawor\source\repos\SFML-project\x64\Release\gra sfml.exe
