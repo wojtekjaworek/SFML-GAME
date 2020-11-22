@@ -15,6 +15,9 @@ private:
 	std::vector<Obstacle*> obstacles;
 
 
+	//new stuff
+	sf::Clock clock;
+	sf::Time clockTime;
 	 
 	//player 
 	Player* player; //pointer to player to control it on the screen
@@ -23,7 +26,7 @@ private:
 	//private functions
 	void initWindow();
 	void initTextures();
-	void initPlayer();
+	void initPlayer(sf::RenderWindow *window);
 
 
 

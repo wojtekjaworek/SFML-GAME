@@ -39,11 +39,6 @@ void Obstacle::render(sf::RenderTarget* target)
 
 //constructor and destructor
 
-Obstacle::Obstacle()
-{
-}
-
-
 Obstacle::Obstacle(sf::Texture* texture, float posX, float posY, float dirX, float dirY, float movementSpeed)
 {
 	this->shape.setTexture(*texture);

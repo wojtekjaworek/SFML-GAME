@@ -15,7 +15,6 @@ private:
 	float movementSpeed; // speed of obstacles 
 
 public:
-	Obstacle();
 	Obstacle(sf::Texture* texture, float posX, float posY, float dirX, float dirY, float movementSpeed);
 	virtual ~Obstacle();
 

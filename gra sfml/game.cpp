@@ -1,6 +1,6 @@
 #include "game.h"
 
-
+#include <iostream>
 //private functions
 void Game::initWindow()
 {
@@ -16,9 +16,10 @@ void Game::initTextures()
 	this->textures["OBSTACLE"]->loadFromFile("textures/test2.png");
 }
 
-void Game::initPlayer()
+void Game::initPlayer(sf::RenderWindow *window)
 {
-	this->player = new Player();
+	this->player = new Player(this->window);
+
 }
 
 
@@ -26,6 +27,7 @@ void Game::initPlayer()
 void Game::run()
 {
 while (this->window->isOpen()) {
+	this->clockTime = clock.getElapsedTime();
 	this->update();
 	this->render();
 }
@@ -59,9 +61,11 @@ void Game::updateInput()
 	}
 
 
-	if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+	if (this->clockTime.asSeconds() > (static_cast<float>(3))) { // spawn obstacle every 3 seconds
 
-		this->obstacles.push_back(new Obstacle(this->textures["OBSTACLE"], 0.f, 0.f, 0.f, 0.f, 0.f));
+		this->clock.restart();
+		this->obstacles.push_back(new Obstacle(this->textures["OBSTACLE"], 0.f, 0.f, 0.f, 1.f, 2.f));
+		std::cout << "number of rendered obstacles <total>: " << obstacles.size() << std::endl;
 	}
 
 
@@ -107,7 +111,7 @@ Game::Game()
 {
 	this->initWindow();
 	this->initTextures();
-	this->initPlayer();
+	this->initPlayer(this->window);
 }
 
 Game::~Game()

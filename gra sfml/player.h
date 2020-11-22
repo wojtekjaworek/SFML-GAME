@@ -18,11 +18,13 @@ private:
 	//functions
 	void initTexture();
 	void initSprite();
+	void initPosition(sf::RenderWindow* window);
+
 	
 
 
 public:
-	Player();
+	Player(sf::RenderWindow *window);
 	virtual ~Player();
 
 	//functions
