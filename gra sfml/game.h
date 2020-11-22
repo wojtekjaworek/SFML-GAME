@@ -16,8 +16,12 @@ private:
 
 
 	//new stuff
-	sf::Clock clock;
-	sf::Time clockTime;
+	sf::Clock obstacleSpawnClock;
+	sf::Clock lifeClock;
+	sf::Time obstacleSpawnTime;
+	sf::Time lifeTime;
+	sf::Text lifeTimeCounter;
+	sf::Font lifeTimeCounter_font;
 	 
 	//player 
 	Player* player; //pointer to player to control it on the screen
@@ -26,7 +30,9 @@ private:
 	//private functions
 	void initWindow();
 	void initTextures();
+	void initStuff(); // initialize other stuff like fonts etc.
 	void initPlayer(sf::RenderWindow *window);
+	
 
 
 

@@ -16,6 +16,14 @@ void Game::initTextures()
 	this->textures["OBSTACLE"]->loadFromFile("textures/test2.png");
 }
 
+
+void Game::initStuff()
+{
+	this->lifeTimeCounter_font.loadFromFile("fonts/arial.ttf"); // set font for the time counter
+	this->lifeTimeCounter.setFont(lifeTimeCounter_font);
+}
+
+
 void Game::initPlayer(sf::RenderWindow *window)
 {
 	this->player = new Player(this->window);
@@ -23,11 +31,15 @@ void Game::initPlayer(sf::RenderWindow *window)
 }
 
 
+
+
 //public functions 
 void Game::run()
 {
 while (this->window->isOpen()) {
-	this->clockTime = clock.getElapsedTime();
+	this->obstacleSpawnTime = this->obstacleSpawnClock.getElapsedTime();
+	this->lifeTime = this->lifeClock.getElapsedTime();
+	this->lifeTimeCounter.setString(std::to_string(this->lifeTime.asSeconds()));
 	this->update();
 	this->render();
 }
@@ -61,9 +73,9 @@ void Game::updateInput()
 	}
 
 
-	if (this->clockTime.asSeconds() > (static_cast<float>(3))) { // spawn obstacle every 3 seconds
+	if (this->obstacleSpawnTime.asSeconds() > (static_cast<float>(3))) { // spawn obstacle every 3 seconds
 
-		this->clock.restart();
+		this->obstacleSpawnClock.restart();
 		this->obstacles.push_back(new Obstacle(this->textures["OBSTACLE"], 0.f, 0.f, 0.f, 1.f, 2.f));
 		std::cout << "number of rendered obstacles <total>: " << obstacles.size() << std::endl;
 	}
@@ -102,6 +114,12 @@ void Game::render()
 	}
 
 
+	//draw lifetime counter in the right top corner
+	this->window->draw(this->lifeTimeCounter);
+
+
+
+	//display everything 
 	this->window->display();
 }
 
@@ -111,7 +129,9 @@ Game::Game()
 {
 	this->initWindow();
 	this->initTextures();
+	this->initStuff();
 	this->initPlayer(this->window);
+	
 }
 
 Game::~Game()
