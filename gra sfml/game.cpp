@@ -2,7 +2,10 @@
 
 #include <iostream>
 #include <time.h>
-
+#include <math.h>
+#include <fstream>
+#include <string>
+#include <sstream>
 
 //private functions
 void Game::initWindow()
@@ -43,6 +46,7 @@ while (this->window->isOpen()) {
 
 	this->obstacleSpawnTime = this->obstacleSpawnClock.getElapsedTime();
 	this->lifeTime = this->lifeClock.getElapsedTime();
+	this->movementSpeedTime = this->movementSpeedClock.getElapsedTime();
 	this->lifeTimeCounter.setString(std::to_string(this->lifeTime.asSeconds()));
 	this->update();
 	this->render();
@@ -61,6 +65,8 @@ void Game::updatePollEvents()
 }
 
 void Game::updateInput()
+
+//TODO: uzale¿niæ prêdkoœci zmiany po³o¿enia (argumenty move) od prêdkoœci z jak¹ przeszkody poruszaj¹ siê,
 {
 	//move player
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && this->player->getPos().y >= 5.f) {
@@ -77,24 +83,64 @@ void Game::updateInput()
 	}
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
-		std::cout << "escape" << std::endl;
+		this->loadSavedGame(); // temporary saving game while esc is pressed, later i will implement saving button in the menu 
 	}
 
 
-
-
-	if (this->obstacleSpawnTime.asSeconds() > (static_cast<float>(2))) { // spawn obstacle every 3 seconds
-
-		this->obstacleSpawnClock.restart();
-		this->obstacles.push_back(new Obstacle(this->textures["OBSTACLE"], rand()%this->window->getSize().x, -50.0f, 0.f, 1.f, 2.f));
-		std::cout << "number of obstacles on the screen: " << obstacles.size() << std::endl;
-	}
 
 
 }
 
 void Game::updateObstacles()
 {
+	//movementSpeed calculation, the longer player plays, the faster obstacles should move
+
+	
+	float movementSpeedLevel = this->movementSpeedTime.asSeconds();
+
+	if (movementSpeedLevel > 10) {
+		movementSpeedClock.restart();
+		this->movementSpeed += 2;
+		
+	}
+
+
+	//spawning obstacles, the longer player plays, the more obstacles should be spawned, becaulce they move faster and hence disappear faster 
+
+
+	if (this->obstacleSpawnTime.asSeconds() > (static_cast<float>(4/this->movementSpeed))) { // spawn obstacle every 3 seconds
+
+
+		this->obstacleSpawnClock.restart();
+
+		int positionX = rand() % this->window->getSize().x;
+
+		
+		if (this->obstacles.size() != 0) { //dont apply this code if theres no obstacles on the screen
+
+
+			while (abs(positionX - this->obstacles.back()->getBounds().left) < (this->player->getBounds().width + 130 + this->obstacles.back()->getBounds().width)) { // space between obstacles cannot be so small that player doesnt have a chance to go through
+
+					positionX = rand() % this->window->getSize().x;
+			}
+
+		}
+
+
+		this->obstacles.push_back(new Obstacle(this->textures["OBSTACLE"], positionX, -50.0f, 0.f, 1.f, movementSpeed));
+		//std::cout << "number of obstacles on the screen: " << obstacles.size() << std::endl;
+
+	}
+
+	for (auto* obstacle : this->obstacles) { 
+		obstacle->setMovementSpeed(movementSpeed);
+
+	}
+
+
+
+
+
 
 	unsigned int i = 0;
 	for (auto* obstacle : this->obstacles) {
@@ -116,7 +162,69 @@ void Game::updateObstacles()
 
 void Game::saveGame()
 {
-	
+	std::ofstream save;
+	save.open("save.csv"); // saving to csv, first line contain names, second line contain values
+	if (!save) {
+		perror("ERROR: nie mozna otworzyc pliku do zapisu!");
+	}
+
+	if (save) {
+		save << "score,unlockedCarID,unlockedTrackID" << std::endl;
+		save << this->lifeTime.asMilliseconds() << "," << 0 << "," << 0 << std::endl;// zapisany przykladowy jeden parametr
+		save.close();
+	}
+
+}
+
+void Game::loadSavedGame() // NIEDOKOÑCZONA FUNKCJA
+{
+	std::ifstream file;
+	file.open("save.csv");
+	if (!file) {
+		perror("ERROR: nie mozna zaladowac sejwa");
+	}
+
+	if (file) {
+		std::string line, colname;
+		int copy;
+		std::getline(file, line); // get first line of file
+		std::stringstream ss(line);
+
+		while (std::getline(ss, colname, ',')) { // extract every column from first line 
+
+			// Initialize and add <colname, int vector> pairs to loadedDataFromSave
+			this->loadedDataFromSave.push_back({ colname, std::vector<int> {} });
+		}
+
+
+		// Read data, line by line
+		while (std::getline(file, line))
+		{
+			
+			std::stringstream ss(line);
+			int index = 0;
+
+			while (ss >> copy) {
+
+				this->loadedDataFromSave.at(index).second.push_back(copy);
+
+				if (ss.peek() == ',') ss.ignore(); // skip when comma
+
+				index++;
+			}
+		}
+
+		file.close();
+
+
+	}
+
+
+
+
+
+
+
 }
 
 void Game::update()

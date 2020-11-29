@@ -26,6 +26,7 @@ public:
 	//functions
 	void update();
 	void render(sf::RenderTarget* target);
+	float setMovementSpeed(float speed);
 
 };
 

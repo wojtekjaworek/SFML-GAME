@@ -4,6 +4,7 @@
 #include "collision.h"
 #include "save.h"
 #include <map>
+#include <fstream>
 
 class Game {
 
@@ -16,17 +17,33 @@ private:
 	std::map<std::string, sf::Texture* > textures; //name of texture and texture itself, easy to navigate
 	std::vector<Obstacle*> obstacles;
 
-
+	std::vector<std::pair<std::string, std::vector<int>>> loadedDataFromSave;
 
 
 	//new stuff
 	sf::Clock obstacleSpawnClock;
-	sf::Clock lifeClock;
 	sf::Time obstacleSpawnTime;
+
+
+	sf::Clock movementSpeedClock;
+	sf::Time movementSpeedTime;
+	float movementSpeed = 2; // initial value for speed of obstacles
+
+	sf::Clock lifeClock;
 	sf::Time lifeTime;
+
+
 	sf::Text lifeTimeCounter;
 	sf::Font lifeTimeCounter_font;
 
+
+	struct loadSavedData {
+		int score;
+		int UnlockedCarID;
+		int unlockedTrackID;
+	};
+
+	loadSavedData loadSaved;
 
 
 	//player 
@@ -60,6 +77,7 @@ public:
 	void updateInput(); // control player class from keyboard etc
 	void updateObstacles();
 	void saveGame();
+	void loadSavedGame();
 	void update();
 	void render();
 

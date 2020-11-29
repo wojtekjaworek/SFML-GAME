@@ -34,6 +34,14 @@ void Obstacle::render(sf::RenderTarget* target)
 	target->draw(this->shape);
 }
 
+float Obstacle::setMovementSpeed(float speed)
+{
+
+	this->movementSpeed = speed;
+	return this->movementSpeed;
+}
+
+
 
 
 
@@ -47,7 +55,7 @@ Obstacle::Obstacle(sf::Texture* texture, float posX, float posY, float dirX, flo
 	//direction is a Vector2f, dirX, dirY are passed in
 	this->direction.x = dirX;
 	this->direction.y = dirY;
-	this->movementSpeed = movementSpeed;
+	this->movementSpeed = setMovementSpeed(movementSpeed);
 }
 
 Obstacle::~Obstacle()
