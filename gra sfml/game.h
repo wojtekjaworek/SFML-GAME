@@ -1,6 +1,8 @@
 #pragma once
 #include "player.h"
 #include "obstacle.h"
+#include "collision.h"
+#include "save.h"
 #include <map>
 
 class Game {
@@ -15,6 +17,8 @@ private:
 	std::vector<Obstacle*> obstacles;
 
 
+
+
 	//new stuff
 	sf::Clock obstacleSpawnClock;
 	sf::Clock lifeClock;
@@ -22,9 +26,14 @@ private:
 	sf::Time lifeTime;
 	sf::Text lifeTimeCounter;
 	sf::Font lifeTimeCounter_font;
-	 
+
+
+
 	//player 
 	Player* player; //pointer to player to control it on the screen
+
+	
+
 
 
 	//private functions
@@ -41,6 +50,8 @@ public:
 	Game();
 	virtual ~Game();
 
+
+
 	//public functions
 	void run();
 
@@ -48,6 +59,7 @@ public:
 	void updatePollEvents(); //speaks for itself
 	void updateInput(); // control player class from keyboard etc
 	void updateObstacles();
+	void saveGame();
 	void update();
 	void render();
 

@@ -29,7 +29,22 @@ void Player::initPosition(sf::RenderWindow* window)
 }
 
 
+//accessor
+const sf::FloatRect Player::getBounds()
+{
+	return this->sprite.getGlobalBounds();
+}
+
+
 //public functions
+
+sf::Vector2f Player::getPos()
+{
+	return this->sprite.getPosition();
+}
+
+
+
 void Player::move(const float dirX, const float dirY)
 {
 	this->sprite.move(this->movementSpeed * dirX, this->movementSpeed * dirY);

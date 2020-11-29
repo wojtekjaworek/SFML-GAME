@@ -21,7 +21,7 @@ public:
 
 
 	//accessor
-	const sf::FloatRect getBounds() const;
+	const sf::FloatRect getBounds();
 
 	//functions
 	void update();

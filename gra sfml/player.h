@@ -23,11 +23,19 @@ private:
 	
 
 
+
 public:
 	Player(sf::RenderWindow *window);
 	virtual ~Player();
 
+
+
+	//accessor
+	const sf::FloatRect getBounds();
+
+
 	//functions
+	sf::Vector2f getPos();
 	void move(const float dirX, const float dirY);
 	void update();
 	void render(sf::RenderTarget& target);

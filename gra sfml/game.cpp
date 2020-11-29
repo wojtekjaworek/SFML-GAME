@@ -1,6 +1,9 @@
 #include "game.h"
 
 #include <iostream>
+#include <time.h>
+
+
 //private functions
 void Game::initWindow()
 {
@@ -37,6 +40,7 @@ void Game::initPlayer(sf::RenderWindow *window)
 void Game::run()
 {
 while (this->window->isOpen()) {
+
 	this->obstacleSpawnTime = this->obstacleSpawnClock.getElapsedTime();
 	this->lifeTime = this->lifeClock.getElapsedTime();
 	this->lifeTimeCounter.setString(std::to_string(this->lifeTime.asSeconds()));
@@ -59,25 +63,31 @@ void Game::updatePollEvents()
 void Game::updateInput()
 {
 	//move player
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
-		this->player->move(0.f, 0.f);
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && this->player->getPos().y >= 5.f) {
+			this->player->move(0.f, -0.5f);
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
-		this->player->move(0.f, 0.f);
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && this->player->getPos().y < this->window->getSize().y - this->player->getBounds().height) {
+		this->player->move(0.f, 0.5f);
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && this->player->getPos().x < this->window->getSize().x - this->player->getBounds().width) {
 		this->player->move(1.f, 0.f);
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && this->player->getPos().x >=5.f) {
 		this->player->move(-1.f, 0.f);
 	}
 
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
+		std::cout << "escape" << std::endl;
+	}
 
-	if (this->obstacleSpawnTime.asSeconds() > (static_cast<float>(3))) { // spawn obstacle every 3 seconds
+
+
+
+	if (this->obstacleSpawnTime.asSeconds() > (static_cast<float>(2))) { // spawn obstacle every 3 seconds
 
 		this->obstacleSpawnClock.restart();
-		this->obstacles.push_back(new Obstacle(this->textures["OBSTACLE"], 0.f, 0.f, 0.f, 1.f, 2.f));
-		std::cout << "number of rendered obstacles <total>: " << obstacles.size() << std::endl;
+		this->obstacles.push_back(new Obstacle(this->textures["OBSTACLE"], rand()%this->window->getSize().x, -50.0f, 0.f, 1.f, 2.f));
+		std::cout << "number of obstacles on the screen: " << obstacles.size() << std::endl;
 	}
 
 
@@ -86,10 +96,27 @@ void Game::updateInput()
 void Game::updateObstacles()
 {
 
+	unsigned int i = 0;
 	for (auto* obstacle : this->obstacles) {
 		obstacle->update();
+
+
+		//delete obstacle when comes to the edge of the window
+		if (obstacle->getBounds().top > this->window->getSize().y) {
+
+			delete obstacle; //free memory
+			this->obstacles.erase(this->obstacles.begin() + i); // delete from vector tracking total number of obstacles
+			i--;
+		}
+
+		i++; 
 	}
 
+}
+
+void Game::saveGame()
+{
+	
 }
 
 void Game::update()
@@ -127,6 +154,9 @@ void Game::render()
 //constructor &destructor
 Game::Game()
 {
+
+	srand(time(NULL));
+
 	this->initWindow();
 	this->initTextures();
 	this->initStuff();

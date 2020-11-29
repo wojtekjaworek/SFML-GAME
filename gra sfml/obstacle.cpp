@@ -4,7 +4,7 @@
 
 
 //accessors
-const sf::FloatRect Obstacle::getBounds() const
+const sf::FloatRect Obstacle::getBounds()
 {
 	return this->shape.getGlobalBounds();
 }
