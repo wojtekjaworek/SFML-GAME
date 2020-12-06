@@ -3,7 +3,10 @@
 #include "obstacle.h"
 #include "collision.h"
 #include "save.h"
+#include "menu.h"
+#include "pauseMenu.h"
 #include <map>
+#include <vector>
 #include <fstream>
 
 class Game {
@@ -19,8 +22,14 @@ private:
 
 	std::vector<std::pair<std::string, std::vector<int>>> loadedDataFromSave;
 
+	Menu* mainMenu;
+	bool mainMenuFlag = true;
 
-	//new stuff
+	PauseMenu* pauseMenu;
+	bool pauseMenuFlag = false;
+
+
+	//stuff 
 	sf::Clock obstacleSpawnClock;
 	sf::Time obstacleSpawnTime;
 
@@ -58,6 +67,8 @@ private:
 	void initTextures();
 	void initStuff(); // initialize other stuff like fonts etc.
 	void initPlayer(sf::RenderWindow *window);
+	void initMainMenu();
+	void initPauseMenu();
 	
 
 
@@ -76,6 +87,8 @@ public:
 	void updatePollEvents(); //speaks for itself
 	void updateInput(); // control player class from keyboard etc
 	void updateObstacles();
+	void showMenu(sf::RenderWindow* window);
+	void showPauseMenu(sf::RenderWindow* window);
 	void saveGame();
 	void loadSavedGame();
 	void update();
