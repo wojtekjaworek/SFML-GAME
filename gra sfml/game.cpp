@@ -102,44 +102,69 @@ void Game::updatePollEvents()
 		}
 
 
-		if (this->mainMenuFlag == true && this->mainMenu->selectedIndex == 0) { // start gry
+		
+		
+		if (this->mainMenuFlag == true && this->mainMenu->selectedIndex == 0) { 
+			switch (event.type) {
+			case sf::Event::KeyReleased:
+				if (event.key.code == sf::Keyboard::Enter) {
+
+					this->loadSavedGame();
+					this->initLoadedVariables();
+
+					this->mainMenuFlag = false;
+
+					this->lifeClock.restart();
+					this->movementSpeedClock.restart();
+					this->obstacleSpawnClock.restart();
+
+
+				}
+			}
+		}
+
+		
+		if (this->mainMenuFlag == true && this->mainMenu->selectedIndex == 1) { // start gry
 			switch (event.type) {
 			case sf::Event::KeyReleased:
 				if (event.key.code == sf::Keyboard::Enter) {
 					this->mainMenuFlag = false;
-				}
-			}
-		}
-		
-		
-		
-		
-		if (this->mainMenuFlag == true && this->mainMenu->selectedIndex == 1) { // kolejne menu, do dokonczenia
-			switch (event.type) {
-			case sf::Event::KeyReleased:
-				if (event.key.code == sf::Keyboard::Enter) {
-					/*
-					
-					
-					
-					jeszcze nie zrobione,
-					tutaj bedzie kolejne menu wyboru
-					
-					
-					
-					*/
+					this->lifeClock.restart();
+					this->movementSpeedClock.restart();
+					this->obstacleSpawnClock.restart();
 				}
 			}
 		}
 
 
 
-
+		
 		if (this->mainMenuFlag == true && this->mainMenu->selectedIndex == 2) { // kolejne menu, do dokonczenia
 			switch (event.type) {
 			case sf::Event::KeyReleased:
 				if (event.key.code == sf::Keyboard::Enter) {
 					/*
+					
+					
+					
+					jeszcze nie zrobione,
+					tutaj bedzie kolejne menu wyboru
+					
+					
+					
+					*/
+				}
+			}
+		}
+
+
+
+
+		if (this->mainMenuFlag == true && this->mainMenu->selectedIndex == 3) { // kolejne menu, do dokonczenia
+			switch (event.type) {
+			case sf::Event::KeyReleased:
+				if (event.key.code == sf::Keyboard::Enter) {
+					/*
 
 
 
@@ -157,7 +182,7 @@ void Game::updatePollEvents()
 
 
 
-		if (this->mainMenuFlag == true && this->mainMenu->selectedIndex == 3) { // informacje o grze i kodzie
+		if (this->mainMenuFlag == true && this->mainMenu->selectedIndex == 4) { // informacje o grze i kodzie
 			switch (event.type) {
 			case sf::Event::KeyReleased:
 				if (event.key.code == sf::Keyboard::Enter) {
@@ -182,6 +207,10 @@ void Game::updatePollEvents()
 
 
 
+
+
+
+
 		if (this->mainMenuFlag == false && this->pauseMenuFlag == false) { // turn on/off pause menu
 			switch (event.type) {
 			case sf::Event::KeyReleased:
@@ -191,18 +220,18 @@ void Game::updatePollEvents()
 
 
 						this->lifeTime_temp += this->lifeTime.asSeconds();
-						this->lifeTime = sf::seconds(0);
-						this->lifeClock.restart();
+						//this->lifeTime = sf::seconds(0);
+						//this->lifeClock.restart();
 
 
 						this->obstacleSpawnTime_temp = this->obstacleSpawnTime.asSeconds();
-						this->obstacleSpawnTime = sf::seconds(0);
-						this->obstacleSpawnClock.restart();
+						//this->obstacleSpawnTime = sf::seconds(0);
+						//this->obstacleSpawnClock.restart();
 
 
 						this->movementSpeedTime_temp = this->movementSpeedTime.asSeconds();
-						this->movementSpeedTime = sf::seconds(0);
-						this->movementSpeedClock.restart();
+						//this->movementSpeedTime = sf::seconds(0);
+						//this->movementSpeedClock.restart();
 
 
 					}
@@ -330,10 +359,7 @@ void Game::updateObstacles()
 
 		}
 
-		for (auto* obstacle : this->obstacles) {
-			obstacle->setMovementSpeed(movementSpeed);
-
-		}
+		
 
 }
 
@@ -343,6 +369,10 @@ void Game::updateObstaclesSpeed()
 
 	this->movementSpeed = ((movementSpeedLevel+5) / 5) - sqrt((movementSpeedLevel+5)/5);
 
+	for (auto* obstacle : this->obstacles) {
+		obstacle->setMovementSpeed(movementSpeed);
+
+	}
 
 }
 
@@ -384,6 +414,8 @@ void Game::showPauseMenu(sf::RenderWindow* window)
 
 void Game::saveGame()
 {
+
+	this->totalScore += this->lifeTime.asSeconds();
 	std::ofstream save;
 	save.open("save.csv"); // saving to csv, first line contain names, second line contain values
 	if (!save) {
@@ -391,8 +423,9 @@ void Game::saveGame()
 	}
 
 	if (save) {
-		save << "score,unlockedCarID,unlockedTrackID" << std::endl;
-		save << this->lifeTime.asMilliseconds() << "," << 0 << "," << 0 << std::endl;// zapisany przykladowy jeden parametr
+		save << "totalScore,lifeTime,movementTime,obstacleSpawnTime,numberOfUnlockedCars,numberOfUnlockedTracks,unlockedDifficultyLevel" << std::endl;
+		save << this->totalScore <<","<< this->lifeTime.asSeconds() <<","<< this->movementSpeedTime.asSeconds() << "," << this->obstacleSpawnTime.asSeconds() <<","
+			 << this->numberOfUnlockedCars << "," << this->numberOfUnlockedTracks << "," << this->UnlockedDifficultyLevel << std::endl;
 		save.close();
 	}
 
@@ -403,19 +436,19 @@ void Game::loadSavedGame() // NIEDOKOÑCZONA FUNKCJA
 	std::ifstream file;
 	file.open("save.csv");
 	if (!file) {
-		perror("ERROR: nie mozna zaladowac sejwa");
+		perror("ERROR: nie mozna zaladowac save'a");
 	}
 
 	if (file) {
 		std::string line, colname;
-		int copy;
+		float copy;
 		std::getline(file, line); // get first line of file
 		std::stringstream ss(line);
 
 		while (std::getline(ss, colname, ',')) { // extract every column from first line 
 
 			// Initialize and add <colname, int vector> pairs to loadedDataFromSave
-			this->loadedDataFromSave.push_back({ colname, std::vector<int> {} });
+			this->loadedDataFromSave.push_back({ colname, std::vector<float> {} });
 		}
 
 
@@ -438,8 +471,17 @@ void Game::loadSavedGame() // NIEDOKOÑCZONA FUNKCJA
 
 		file.close();
 
-
 	}
+
+
+	std::cout << "LOADED DATA" << std::endl;
+	std::cout << this->loadedDataFromSave.size() << std::endl;
+
+	for (int i = 0; i <= this->loadedDataFromSave.size() - 1; i++) {
+		std::cout << this->loadedDataFromSave[i].first << ":  " << this->loadedDataFromSave[i].second[0] << std::endl;
+	}
+
+
 
 
 }
@@ -456,6 +498,9 @@ void Game::update()
 		this->updateObstaclesSpeed();
 		this->updateObstalesPosition();
 	}
+
+
+	this->gameProgress();
 	
 }
 
@@ -492,6 +537,75 @@ void Game::render()
 }
 
 
+
+
+
+
+
+//TESTOWE FUNKCJE
+
+void Game::gameProgress() // unlocking new cars and tracks etc
+{
+	float lifeTimeTemp = this->lifeTime.asSeconds();
+	float movementSpeedTemp = this->movementSpeedTime.asSeconds();
+	float obstacleSpawnTimeTemp = this->obstacleSpawnTime.asSeconds();
+
+
+	if ((static_cast<int>(lifeTimeTemp)) == 10) {
+		if (this->numberOfUnlockedCars < 1) {
+			this->numberOfUnlockedCars = 1;
+		}
+	}
+
+
+	if ((static_cast<int>(lifeTimeTemp)) == 20) {
+		if (this->numberOfUnlockedCars < 2) {
+			this->numberOfUnlockedCars = 2;
+		}
+	}
+
+
+	if ((static_cast<int>(lifeTimeTemp)) == 30) {
+		if (this->numberOfUnlockedCars < 3) {
+			this->numberOfUnlockedCars = 3;
+		}
+	}
+
+	if (this->totalScore > 50) {
+		this->numberOfUnlockedTracks = 1;
+	}
+
+	if (this->totalScore > 75) {
+		this->numberOfUnlockedTracks = 2;
+	}
+
+	if (this->totalScore > 100) {
+		this->numberOfUnlockedTracks = 3;
+	}
+
+
+}
+
+void Game::initLoadedVariables()
+{
+	this->numberOfUnlockedCars = this->loadedDataFromSave[4].second[0];
+	std::cout << this->numberOfUnlockedCars<<std::endl;
+	this->numberOfUnlockedTracks = this->loadedDataFromSave[5].second[0];
+	std::cout << this->numberOfUnlockedTracks << std::endl;
+	this->UnlockedDifficultyLevel = this->loadedDataFromSave[6].second[0];
+	std::cout << this->UnlockedDifficultyLevel << std::endl;
+	this->totalScore = this->loadedDataFromSave[0].second[0];
+	std::cout << this->totalScore << std::endl;
+}
+
+
+
+
+
+
+
+
+
 //constructor &destructor
 Game::Game()
 {
@@ -505,7 +619,6 @@ Game::Game()
 	this->initPlayer(this->window);
 	this->initMainMenu();
 	this->initPauseMenu();
-	
 }
 
 Game::~Game()

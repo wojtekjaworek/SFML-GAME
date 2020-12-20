@@ -20,7 +20,7 @@ private:
 	std::map<std::string, sf::Texture* > textures; //name of texture and texture itself, easy to navigate
 	std::vector<Obstacle*> obstacles;
 
-	std::vector<std::pair<std::string, std::vector<int>>> loadedDataFromSave;
+	std::vector<std::pair<std::string, std::vector<float>>> loadedDataFromSave;
 
 	Menu* mainMenu;
 	bool mainMenuFlag = true;
@@ -63,6 +63,16 @@ private:
 	
 
 
+	//ZMIENNE DO TESTOWYCH FUNKCJI
+
+	int numberOfUnlockedCars = 0;
+	int numberOfUnlockedTracks = 0;
+	int UnlockedDifficultyLevel = 0;
+	float totalScore = 0.f;
+
+
+
+
 
 	//private functions
 	void initWindow();
@@ -72,7 +82,6 @@ private:
 	void initMainMenu();
 	void initPauseMenu();
 	void initClocks();
-	
 
 
 
@@ -99,5 +108,12 @@ public:
 	void loadSavedGame();
 	void update();
 	void render();
+
+	//TESTOWE FUNKCJE
+
+	void gameProgress();
+	void initLoadedVariables();
+
+
 
 };

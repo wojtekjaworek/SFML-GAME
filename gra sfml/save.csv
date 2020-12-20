@@ -1,2 +1,2 @@
-score,unlockedCarID,unlockedTrackID
-0,0,0
+totalScore,lifeTime,movementTime,obstacleSpawnTime,numberOfUnlockedCars,numberOfUnlockedTracks,unlockedDifficultyLevel
+2.06677,2.06677,2.06677,2.06677,0,0,0
