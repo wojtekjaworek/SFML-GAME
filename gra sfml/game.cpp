@@ -47,6 +47,14 @@ void Game::initPauseMenu()
 	this->pauseMenu = new PauseMenu(window);
 }
 
+void Game::initClocks()
+{
+
+	this->obstacleSpawnClock.restart();
+	this->movementSpeedClock.restart();
+	this->lifeClock.restart();
+}
+
 
 
 
@@ -55,16 +63,15 @@ void Game::run()
 {
 while (this->window->isOpen()) {
 
-	if (this->mainMenuFlag == false) {
 
-		this->obstacleSpawnClock.restart();
-		this->movementSpeedClock.restart();
-		this->lifeClock.restart();
 
+	if (this->mainMenuFlag == false && this->pauseMenuFlag == false) {
+
+		
 		this->obstacleSpawnTime = this->obstacleSpawnClock.getElapsedTime();
 		this->lifeTime = this->lifeClock.getElapsedTime();
 		this->movementSpeedTime = this->movementSpeedClock.getElapsedTime();
-		this->lifeTimeCounter.setString(std::to_string(this->lifeTime.asSeconds()));
+		this->lifeTimeCounter.setString(std::to_string(this->lifeTime_temp + this->lifeTime.asSeconds()));
 
 	}
 	this->update();
@@ -175,11 +182,32 @@ void Game::updatePollEvents()
 
 
 
-		if (this->mainMenuFlag == false) { // turn on/off pause menu
+		if (this->mainMenuFlag == false && this->pauseMenuFlag == false) { // turn on/off pause menu
 			switch (event.type) {
 			case sf::Event::KeyReleased:
 				if (event.key.code == sf::Keyboard::Escape) {
-					this->pauseMenuFlag = !this->pauseMenuFlag;
+					this->pauseMenuFlag = true;
+					if (this->pauseMenuFlag == true) {
+
+
+						this->lifeTime_temp += this->lifeTime.asSeconds();
+						this->lifeTime = sf::seconds(0);
+						this->lifeClock.restart();
+
+
+						this->obstacleSpawnTime_temp = this->obstacleSpawnTime.asSeconds();
+						this->obstacleSpawnTime = sf::seconds(0);
+						this->obstacleSpawnClock.restart();
+
+
+						this->movementSpeedTime_temp = this->movementSpeedTime.asSeconds();
+						this->movementSpeedTime = sf::seconds(0);
+						this->movementSpeedClock.restart();
+
+
+					}
+
+
 				}
 			}
 		}
@@ -203,7 +231,25 @@ void Game::updatePollEvents()
 			switch (event.type) {
 			case sf::Event::KeyReleased:
 				if (event.key.code == sf::Keyboard::Enter) {
-					this->pauseMenuFlag = !this->pauseMenuFlag;
+					this->pauseMenuFlag = false;
+					if (this->pauseMenuFlag == false) {
+
+
+						this->lifeTime = sf::seconds(0);
+						this->lifeClock.restart();
+						this->lifeTime = this->lifeClock.getElapsedTime();
+
+
+						this->obstacleSpawnTime = sf::seconds(0);
+						this->obstacleSpawnClock.restart();
+						this->obstacleSpawnTime = this->obstacleSpawnClock.getElapsedTime();
+
+
+						this->movementSpeedTime = sf::seconds(0);
+						this->movementSpeedClock.restart();
+						this->movementSpeedTime = this->movementSpeedClock.getElapsedTime();
+
+					}
 				}
 			}
 		}
@@ -218,7 +264,7 @@ void Game::updatePollEvents()
 			}
 		}
 
-		if (this->pauseMenuFlag == true && this->pauseMenu->selectedIndex == 2) { // zapis gry gdy wybierzemy odpowiednia pozycje z menu pauzy
+		if (this->pauseMenuFlag == true && this->pauseMenu->selectedIndex == 2) {
 			switch (event.type) {
 			case sf::Event::KeyReleased:
 				if (event.key.code == sf::Keyboard::Enter) {
@@ -259,20 +305,7 @@ void Game::updateInput()
 
 void Game::updateObstacles()
 {
-	//movementSpeed calculation, the longer player plays, the faster obstacles should move
-
-		float movementSpeedLevel = this->movementSpeedTime.asSeconds();
-
-		if (movementSpeedLevel > 10) {
-			movementSpeedClock.restart();
-			this->movementSpeed += 2;
-
-		}
-
-
-		//spawning obstacles, the longer player plays, the more obstacles should be spawned, becaulce they move faster and hence disappear faster 
-
-
+		
 		if (this->obstacleSpawnTime.asSeconds() > (static_cast<float>(4 / this->movementSpeed))) { // spawn obstacle every 3 seconds
 
 
@@ -302,27 +335,41 @@ void Game::updateObstacles()
 
 		}
 
+}
+
+void Game::updateObstaclesSpeed()
+{
+	float movementSpeedLevel = static_cast<float>(this->lifeTime.asSeconds()) + this->lifeTime_temp;
+
+	this->movementSpeed = ((movementSpeedLevel+5) / 5) - sqrt((movementSpeedLevel+5)/5);
 
 
+}
+
+void Game::updateObstalesPosition()
+{
+	unsigned int i = 0;
+	for (auto* obstacle : this->obstacles) {
+		obstacle->update();
 
 
+		//delete obstacle when comes to the edge of the window
+		if (obstacle->getBounds().top > this->window->getSize().y) {
 
-		unsigned int i = 0;
-		for (auto* obstacle : this->obstacles) {
-			obstacle->update();
-
-
-			//delete obstacle when comes to the edge of the window
-			if (obstacle->getBounds().top > this->window->getSize().y) {
-
-				delete obstacle; //free memory
-				this->obstacles.erase(this->obstacles.begin() + i); // delete from vector tracking total number of obstacles
-				i--;
-			}
-
-			i++;
+			delete obstacle; //free memory
+			this->obstacles.erase(this->obstacles.begin() + i); // delete from vector tracking total number of obstacles
+			i--;
 		}
 
+		i++;
+	}
+}
+
+void Game::resetTime()
+{
+	this->lifeTime = sf::seconds(0);
+	this->obstacleSpawnTime = sf::seconds(0);
+	this->movementSpeedTime = sf::seconds(0);
 }
 
 void Game::showMenu(sf::RenderWindow* window)
@@ -402,7 +449,13 @@ void Game::update()
 	
 	this->updatePollEvents();
 	this->updateInput();
-	this->updateObstacles();
+
+
+	if (this->pauseMenuFlag == false) {
+		this->updateObstacles();
+		this->updateObstaclesSpeed();
+		this->updateObstalesPosition();
+	}
 	
 }
 
@@ -448,6 +501,7 @@ Game::Game()
 	this->initWindow();
 	this->initTextures();
 	this->initStuff();
+	this->initClocks();
 	this->initPlayer(this->window);
 	this->initMainMenu();
 	this->initPauseMenu();

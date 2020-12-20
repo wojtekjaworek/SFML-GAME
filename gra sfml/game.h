@@ -32,14 +32,16 @@ private:
 	//stuff 
 	sf::Clock obstacleSpawnClock;
 	sf::Time obstacleSpawnTime;
-
+	float obstacleSpawnTime_temp;
 
 	sf::Clock movementSpeedClock;
 	sf::Time movementSpeedTime;
+	float movementSpeedTime_temp;
 	float movementSpeed = 2; // initial value for speed of obstacles
 
 	sf::Clock lifeClock;
 	sf::Time lifeTime;
+	float lifeTime_temp;
 
 
 	sf::Text lifeTimeCounter;
@@ -69,6 +71,7 @@ private:
 	void initPlayer(sf::RenderWindow *window);
 	void initMainMenu();
 	void initPauseMenu();
+	void initClocks();
 	
 
 
@@ -87,6 +90,9 @@ public:
 	void updatePollEvents(); //speaks for itself
 	void updateInput(); // control player class from keyboard etc
 	void updateObstacles();
+	void updateObstaclesSpeed();
+	void updateObstalesPosition();
+	void resetTime();
 	void showMenu(sf::RenderWindow* window);
 	void showPauseMenu(sf::RenderWindow* window);
 	void saveGame();
