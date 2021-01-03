@@ -1,6 +1,8 @@
 #include "player.h"
 
 #include <iostream>
+#include <string>
+
 
 
 //private functions
@@ -10,6 +12,17 @@ void Player::initTexture()
 	if (!this->texture.loadFromFile("textures/test.png")) {
 		std::cout << "Error: player.cpp -> initTexture():: texture file not loaded!"<< std::endl;
 	}
+
+
+
+	for (int i = 0;i < 4;i++) {
+
+		this->textures["PLAYER" + std::to_string(i)] = new sf::Texture();
+		this->textures["PLAYER" + std::to_string(i)]->loadFromFile("textures/player" + std::to_string(i) + ".png");
+
+
+	}
+
 
 }
 

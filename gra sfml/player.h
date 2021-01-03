@@ -12,6 +12,8 @@ class Player
 private:
 	sf::Sprite sprite;
 	sf::Texture texture;
+	std::map<std::string, sf::Texture* > textures; //name of texture and texture itself, easy to navigate
+
 
 	float movementSpeed;
 

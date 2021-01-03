@@ -20,6 +20,10 @@ void Game::initTextures()
 {
 	this->textures["OBSTACLE"] = new sf::Texture();
 	this->textures["OBSTACLE"]->loadFromFile("textures/test2.png");
+
+	this->textures["BACKGROUND"] = new sf::Texture();
+	this->textures["BACKGROUND"]->loadFromFile("textures/background.png");
+
 }
 
 
@@ -47,12 +51,27 @@ void Game::initPauseMenu()
 	this->pauseMenu = new PauseMenu(window);
 }
 
+void Game::initSelectDifficultyLevel() 
+{
+	this->selectDifficultyLevel = new SelectDifficultyLevel(window);
+}
+
 void Game::initClocks()
 {
 
 	this->obstacleSpawnClock.restart();
 	this->movementSpeedClock.restart();
 	this->lifeClock.restart();
+}
+
+void Game::initBackground()
+{
+	this->background.setTexture(*this->textures["BACKGROUND"]);
+}
+
+void Game::initSelectCarMenu()
+{
+	this->selectCarMenu = new SelectCarMenu(window);
 }
 
 
@@ -65,7 +84,7 @@ while (this->window->isOpen()) {
 
 
 
-	if (this->mainMenuFlag == false && this->pauseMenuFlag == false) {
+	if (this->mainMenuFlag == false && this->pauseMenuFlag == false && this->selectDifficultyLevelFlag == false) {
 
 		
 		this->obstacleSpawnTime = this->obstacleSpawnClock.getElapsedTime();
@@ -90,7 +109,7 @@ void Game::updatePollEvents()
 		}
 
 
-		if (this->mainMenuFlag == true) { //select desired position in main menu
+		if (this->mainMenuFlag == true && this->selectDifficultyLevelFlag == false) { //select desired position in main menu
 
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
 				this->mainMenu->selectUp();
@@ -104,7 +123,7 @@ void Game::updatePollEvents()
 
 		
 		
-		if (this->mainMenuFlag == true && this->mainMenu->selectedIndex == 0) { 
+		if (this->mainMenuFlag == true && this->selectDifficultyLevelFlag == false && this->mainMenu->selectedIndex == 0) { 
 			switch (event.type) {
 			case sf::Event::KeyReleased:
 				if (event.key.code == sf::Keyboard::Enter) {
@@ -124,7 +143,7 @@ void Game::updatePollEvents()
 		}
 
 		
-		if (this->mainMenuFlag == true && this->mainMenu->selectedIndex == 1) { // start gry
+		if (this->mainMenuFlag == true && this->selectDifficultyLevelFlag == false && this->mainMenu->selectedIndex == 1) { // start gry
 			switch (event.type) {
 			case sf::Event::KeyReleased:
 				if (event.key.code == sf::Keyboard::Enter) {
@@ -139,19 +158,69 @@ void Game::updatePollEvents()
 
 
 		
-		if (this->mainMenuFlag == true && this->mainMenu->selectedIndex == 2) { // kolejne menu, do dokonczenia
+		if (this->mainMenuFlag == true && this->selectDifficultyLevelFlag == false && this->mainMenu->selectedIndex == 2) { // wybor auta
+			switch (event.type) {
+			case sf::Event::KeyReleased:
+				if (event.key.code == sf::Keyboard::Enter) {
+					this->selectCarMenuFlag = true;
+				}
+			}
+		}
+
+
+		if (this->selectCarMenuFlag == true) { // nawigowanie w podmenu wyboru auta
+
+			switch (event.type) {
+			case sf::Event::KeyReleased:
+				if (event.key.code == sf::Keyboard::Up) {
+					this->selectCarMenu->selectUp();
+				}
+
+				if (event.key.code == sf::Keyboard::Down) {
+					this->selectCarMenu->selectDown();
+				}
+
+
+				if (this->selectCarMenu->selectedIndex == 0) {
+					if (event.key.code == sf::Keyboard::Enter) {
+						this->selectCarMenu->next();
+					}
+				}
+
+				if (this->selectCarMenu->selectedIndex == 1) {
+					if (event.key.code == sf::Keyboard::Enter) {
+						this->selectCarMenu->previous();
+
+					}
+				}
+			}
+
+
+
+
+
+
+
+
+			
+
+		}
+
+
+
+		if (this->mainMenuFlag == true && this->selectDifficultyLevelFlag == false && this->mainMenu->selectedIndex == 3) { // kolejne menu, do dokonczenia
 			switch (event.type) {
 			case sf::Event::KeyReleased:
 				if (event.key.code == sf::Keyboard::Enter) {
 					/*
-					
-					
-					
+
+
+
 					jeszcze nie zrobione,
 					tutaj bedzie kolejne menu wyboru
-					
-					
-					
+
+
+
 					*/
 				}
 			}
@@ -160,29 +229,68 @@ void Game::updatePollEvents()
 
 
 
-		if (this->mainMenuFlag == true && this->mainMenu->selectedIndex == 3) { // kolejne menu, do dokonczenia
+
+		if (this->mainMenuFlag == true && this->selectDifficultyLevelFlag == false && this->mainMenu->selectedIndex == 4) {
 			switch (event.type) {
 			case sf::Event::KeyReleased:
 				if (event.key.code == sf::Keyboard::Enter) {
-					/*
+					this->selectDifficultyLevelFlag = true;
+					
+				}
+			}
+		}
+
+
+		if (this->selectDifficultyLevelFlag == true) { // select position in difficulty selection menu
+
+
+			switch (event.type) {
+			case sf::Event::KeyReleased:
+
+				if (event.key.code == sf::Keyboard::Up) {
+					this->selectDifficultyLevel->selectUp();
+				}
+
+				if (event.key.code == sf::Keyboard::Down) {
+					this->selectDifficultyLevel->selectDown();
+				}
+
+				if (this->selectDifficultyLevel->selectedIndex == 0) {
+					if (event.key.code == sf::Keyboard::Left) {
+						this->diffLevel = this->selectDifficultyLevel->selectLeft();
+					}
+
+					if (event.key.code == sf::Keyboard::Right) {
+						this->diffLevel = this->selectDifficultyLevel->selectRight();
+
+					}
+				}
+			}
 
 
 
-					jeszcze nie zrobione,
-					tutaj bedzie kolejne menu wyboru
+			
+		}
 
 
 
-					*/
+		if (this->mainMenuFlag == true && this->selectDifficultyLevelFlag == true && this->selectDifficultyLevel->selectedIndex == 1) {
+			switch (event.type) {
+			case sf::Event::KeyReleased:
+				if (event.key.code == sf::Keyboard::Enter) {
+					this->selectDifficultyLevelFlag = false;
+					this->selectDifficultyLevel->selectedIndex = 0;
+
 				}
 			}
 		}
 
 
 
+		
 
 
-		if (this->mainMenuFlag == true && this->mainMenu->selectedIndex == 4) { // informacje o grze i kodzie
+		if (this->mainMenuFlag == true && this->mainMenu->selectedIndex == 5) { // informacje o grze i kodzie
 			switch (event.type) {
 			case sf::Event::KeyReleased:
 				if (event.key.code == sf::Keyboard::Enter) {
@@ -207,10 +315,6 @@ void Game::updatePollEvents()
 
 
 
-
-
-
-
 		if (this->mainMenuFlag == false && this->pauseMenuFlag == false) { // turn on/off pause menu
 			switch (event.type) {
 			case sf::Event::KeyReleased:
@@ -218,20 +322,7 @@ void Game::updatePollEvents()
 					this->pauseMenuFlag = true;
 					if (this->pauseMenuFlag == true) {
 
-
-						this->lifeTime_temp += this->lifeTime.asSeconds();
-						//this->lifeTime = sf::seconds(0);
-						//this->lifeClock.restart();
-
-
-						this->obstacleSpawnTime_temp = this->obstacleSpawnTime.asSeconds();
-						//this->obstacleSpawnTime = sf::seconds(0);
-						//this->obstacleSpawnClock.restart();
-
-
-						this->movementSpeedTime_temp = this->movementSpeedTime.asSeconds();
-						//this->movementSpeedTime = sf::seconds(0);
-						//this->movementSpeedClock.restart();
+						this->pauseGame();
 
 
 					}
@@ -263,21 +354,8 @@ void Game::updatePollEvents()
 					this->pauseMenuFlag = false;
 					if (this->pauseMenuFlag == false) {
 
-
-						this->lifeTime = sf::seconds(0);
-						this->lifeClock.restart();
-						this->lifeTime = this->lifeClock.getElapsedTime();
-
-
-						this->obstacleSpawnTime = sf::seconds(0);
-						this->obstacleSpawnClock.restart();
-						this->obstacleSpawnTime = this->obstacleSpawnClock.getElapsedTime();
-
-
-						this->movementSpeedTime = sf::seconds(0);
-						this->movementSpeedClock.restart();
-						this->movementSpeedTime = this->movementSpeedClock.getElapsedTime();
-
+						this->resumeGame();
+						
 					}
 				}
 			}
@@ -313,7 +391,7 @@ void Game::updateInput()
 {
 
 
-	if (this->mainMenuFlag == false) {
+	if (this->mainMenuFlag == false && this->pauseMenuFlag == false && this->selectDifficultyLevelFlag == false) {
 		//move player
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && this->player->getPos().y >= 5.f) {
 			this->player->move(0.f, -0.5f);
@@ -335,31 +413,51 @@ void Game::updateInput()
 void Game::updateObstacles()
 {
 		
-		if (this->obstacleSpawnTime.asSeconds() > (static_cast<float>(4 / this->movementSpeed))) { // spawn obstacle every 3 seconds
+		if (this->obstacleSpawnTime.asSeconds() > (static_cast<float>(4 / this->movementSpeed))) { 
 
-
+			int positionX;
 			this->obstacleSpawnClock.restart();
 
-			int positionX = rand() % this->window->getSize().x;
+
+			if (this->diffLevel == 0 || this->diffLevel == 1) {
+				//trzy wyznaczone tory
 
 
-			if (this->obstacles.size() != 0) { //dont apply this code if theres no obstacles on the screen
+				int trackNr = rand() % 3; // randomly picks one of three tracks
 
+				int tracksXcoord[3] = { this->window->getSize().x / 6 * 1, this->window->getSize().x / 6 * 3, this->window->getSize().x / 6 * 5 };
 
-				while (abs(positionX - this->obstacles.back()->getBounds().left) < (this->player->getBounds().width + 130 + this->obstacles.back()->getBounds().width)) { // space between obstacles cannot be so small that player doesnt have a chance to go through
+				positionX = tracksXcoord[trackNr] - this->textures["OBSTACLE"]->getSize().x / 2;
 
-					positionX = rand() % this->window->getSize().x;
-				}
+				this->obstacles.push_back(new Obstacle(this->textures["OBSTACLE"], positionX, -50.0f, 0.f, 1.f, movementSpeed));
+				//std::cout << "number of obstacles on the screen: " << obstacles.size() << std::endl;
 
 			}
 
 
-			this->obstacles.push_back(new Obstacle(this->textures["OBSTACLE"], positionX, -50.0f, 0.f, 1.f, movementSpeed));
-			//std::cout << "number of obstacles on the screen: " << obstacles.size() << std::endl;
+			if (this->diffLevel == 2 || this->diffLevel == 3) {
+				//brak zdefiniowanych torów
+				positionX = rand() % this->window->getSize().x;
+
+
+				if (this->obstacles.size() != 0) { //dont apply this code if theres no obstacles on the screen
+
+
+					while (abs(positionX - this->obstacles.back()->getBounds().left) < (this->player->getBounds().width + 130 + this->obstacles.back()->getBounds().width)) { // space between obstacles cannot be so small that player doesnt have a chance to go through
+
+						positionX = rand() % this->window->getSize().x;
+					}
+
+				}
+
+
+				this->obstacles.push_back(new Obstacle(this->textures["OBSTACLE"], positionX, -50.0f, 0.f, 1.f, movementSpeed));
+				//std::cout << "number of obstacles on the screen: " << obstacles.size() << std::endl;
+			}
+			
 
 		}
 
-		
 
 }
 
@@ -367,12 +465,47 @@ void Game::updateObstaclesSpeed()
 {
 	float movementSpeedLevel = static_cast<float>(this->lifeTime.asSeconds()) + this->lifeTime_temp;
 
-	this->movementSpeed = ((movementSpeedLevel+5) / 5) - sqrt((movementSpeedLevel+5)/5);
 
-	for (auto* obstacle : this->obstacles) {
-		obstacle->setMovementSpeed(movementSpeed);
+
+	if (this->diffLevel == 0) {
+		this->movementSpeed = 1; // the easiest level, just to learn the game 
+
+		for (auto* obstacle : this->obstacles) {
+			obstacle->setMovementSpeed(movementSpeed);
+		}
 
 	}
+
+
+	if (this->diffLevel == 1) { 
+		this->movementSpeed = 2;
+		for (auto* obstacle : this->obstacles) {
+			obstacle->setMovementSpeed(movementSpeed);
+		}
+
+	}
+
+
+	if (this->diffLevel == 2) {
+		this->movementSpeed = ((movementSpeedLevel + 5) / 5) - sqrt((movementSpeedLevel + 5) / 5);
+
+		for (auto* obstacle : this->obstacles) {
+			obstacle->setMovementSpeed(movementSpeed);
+		}
+
+
+	}
+
+
+	if (this->diffLevel == 3) {
+		this->movementSpeed = 10;
+		for (auto* obstacle : this->obstacles) {
+			obstacle->setMovementSpeed(movementSpeed);
+		}
+
+	}
+
+
 
 }
 
@@ -411,6 +544,18 @@ void Game::showPauseMenu(sf::RenderWindow* window)
 {
 	this->pauseMenu->drawMenu(window);
 }
+
+void Game::showSelectDifficultyLevelMenu(sf::RenderWindow* window)
+{
+	this->selectDifficultyLevel->drawMenu(window);
+}
+
+void Game::showSelectCarMenu(sf::RenderWindow* window)
+{
+	this->selectCarMenu->drawMenu(window);
+}
+
+
 
 void Game::saveGame()
 {
@@ -491,9 +636,10 @@ void Game::update()
 	
 	this->updatePollEvents();
 	this->updateInput();
+	
 
 
-	if (this->pauseMenuFlag == false) {
+	if (this->pauseMenuFlag == false && this->selectDifficultyLevelFlag == false) {
 		this->updateObstacles();
 		this->updateObstaclesSpeed();
 		this->updateObstalesPosition();
@@ -508,18 +654,29 @@ void Game::render()
 {
 	this->window->clear();
 
-	if (this->mainMenuFlag == true) {
+	if (this->mainMenuFlag == true && this->selectDifficultyLevelFlag == false && this->selectCarMenuFlag == false) {
 		this->showMenu(window);
 	}
 
+	if (this->mainMenuFlag == true  && this->selectDifficultyLevelFlag == true && this->selectCarMenuFlag == false) {
+		this->showSelectDifficultyLevelMenu(window);
+	}
+
+	if (this->mainMenuFlag == true && this->selectCarMenuFlag == true && this->selectDifficultyLevelFlag == false) {
+		this->showSelectCarMenu(window);
+	}
 
 	if (this->mainMenuFlag == false && this->pauseMenuFlag == true) {
 		this->showPauseMenu(window);
 	}
 
+
+	
 	if (this->mainMenuFlag == false && this->pauseMenuFlag == false) {
 
 		//draw game here
+		this->window->draw(this->background);
+
 		this->player->render(*this->window); // decide where te render player,in this case: on the window (which is a pointer so * )
 
 		for (auto* obstacle : this->obstacles) {
@@ -534,6 +691,42 @@ void Game::render()
 
 	//display everything 
 	this->window->display();
+}
+
+void Game::pauseGame()
+{
+	this->lifeTime_temp += this->lifeTime.asSeconds();
+	//this->lifeTime = sf::seconds(0);
+	//this->lifeClock.restart();
+
+
+	this->obstacleSpawnTime_temp = this->obstacleSpawnTime.asSeconds();
+	//this->obstacleSpawnTime = sf::seconds(0);
+	//this->obstacleSpawnClock.restart();
+
+
+	this->movementSpeedTime_temp = this->movementSpeedTime.asSeconds();
+	//this->movementSpeedTime = sf::seconds(0);
+	//this->movementSpeedClock.restart();
+
+}
+
+void Game::resumeGame()
+{
+	this->lifeTime = sf::seconds(0);
+	this->lifeClock.restart();
+	this->lifeTime = this->lifeClock.getElapsedTime();
+
+
+	this->obstacleSpawnTime = sf::seconds(0);
+	this->obstacleSpawnClock.restart();
+	this->obstacleSpawnTime = this->obstacleSpawnClock.getElapsedTime();
+
+
+	this->movementSpeedTime = sf::seconds(0);
+	this->movementSpeedClock.restart();
+	this->movementSpeedTime = this->movementSpeedClock.getElapsedTime();
+
 }
 
 
@@ -619,6 +812,9 @@ Game::Game()
 	this->initPlayer(this->window);
 	this->initMainMenu();
 	this->initPauseMenu();
+	this->initSelectDifficultyLevel();
+	this->initBackground();
+	this->initSelectCarMenu();
 }
 
 Game::~Game()

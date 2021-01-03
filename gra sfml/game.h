@@ -5,6 +5,8 @@
 #include "save.h"
 #include "menu.h"
 #include "pauseMenu.h"
+#include "selectDifficultyLevel.h"
+#include "selectCarMenu.h"
 #include <map>
 #include <vector>
 #include <fstream>
@@ -22,11 +24,21 @@ private:
 
 	std::vector<std::pair<std::string, std::vector<float>>> loadedDataFromSave;
 
+	sf::Sprite background;
+
 	Menu* mainMenu;
 	bool mainMenuFlag = true;
 
 	PauseMenu* pauseMenu;
 	bool pauseMenuFlag = false;
+
+	SelectDifficultyLevel* selectDifficultyLevel;
+	bool selectDifficultyLevelFlag = false;
+	int diffLevel = 0; //int in range 0,1,2,3, where 0 = easy, 1 = mid, 2 = hard, 3 = extreme
+
+	SelectCarMenu* selectCarMenu;
+	bool selectCarMenuFlag = false;
+	int selectedCar = 0;
 
 
 	//stuff 
@@ -81,7 +93,11 @@ private:
 	void initPlayer(sf::RenderWindow *window);
 	void initMainMenu();
 	void initPauseMenu();
+	void initSelectDifficultyLevel();
 	void initClocks();
+	void initBackground();
+	void initSelectCarMenu();
+
 
 
 
@@ -104,10 +120,14 @@ public:
 	void resetTime();
 	void showMenu(sf::RenderWindow* window);
 	void showPauseMenu(sf::RenderWindow* window);
+	void showSelectDifficultyLevelMenu(sf::RenderWindow* window);
+	void showSelectCarMenu(sf::RenderWindow* window);
 	void saveGame();
 	void loadSavedGame();
 	void update();
 	void render();
+	void pauseGame();
+	void resumeGame();
 
 	//TESTOWE FUNKCJE
 
