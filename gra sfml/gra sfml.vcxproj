@@ -149,6 +149,7 @@
     <ClCompile Include="player.cpp" />
     <ClCompile Include="selectCarMenu.cpp" />
     <ClCompile Include="selectDifficultyLevel.cpp" />
+    <ClCompile Include="selectTrackMenu.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="game.h" />
@@ -158,6 +159,7 @@
     <ClInclude Include="player.h" />
     <ClInclude Include="selectCarMenu.h" />
     <ClInclude Include="selectDifficultyLevel.h" />
+    <ClInclude Include="selectTrackMenu.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

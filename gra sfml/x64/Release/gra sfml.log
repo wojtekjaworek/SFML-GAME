@@ -1,113 +1,39 @@
 ﻿  game.cpp
-C:\Users\jawor\source\repos\SFML-project\gra sfml\game.cpp(428,59): warning C4838: konwersja z „T” do „int” wymaga konwersji zawężającej
+C:\Users\jawor\source\repos\SFML-project\gra sfml\game.cpp(466,59): warning C4838: konwersja z „T” do „int” wymaga konwersji zawężającej
           with
           [
               T=unsigned int
           ]
-C:\Users\jawor\source\repos\SFML-project\gra sfml\game.cpp(428,94): warning C4838: konwersja z „T” do „int” wymaga konwersji zawężającej
+C:\Users\jawor\source\repos\SFML-project\gra sfml\game.cpp(466,94): warning C4838: konwersja z „T” do „int” wymaga konwersji zawężającej
           with
           [
               T=unsigned int
           ]
-C:\Users\jawor\source\repos\SFML-project\gra sfml\game.cpp(428,129): warning C4838: konwersja z „T” do „int” wymaga konwersji zawężającej
+C:\Users\jawor\source\repos\SFML-project\gra sfml\game.cpp(466,129): warning C4838: konwersja z „T” do „int” wymaga konwersji zawężającej
           with
           [
               T=unsigned int
           ]
-C:\Users\jawor\source\repos\SFML-project\gra sfml\game.cpp(432,72): warning C4244: "argument": konwersja z "int" do "float", możliwa utrata danych
-C:\Users\jawor\source\repos\SFML-project\gra sfml\game.cpp(454,72): warning C4244: "argument": konwersja z "int" do "float", możliwa utrata danych
-C:\Users\jawor\source\repos\SFML-project\gra sfml\game.cpp(784,67): warning C4244: "=": konwersja z "_Ty" do "int", możliwa utrata danych
+C:\Users\jawor\source\repos\SFML-project\gra sfml\game.cpp(470,72): warning C4244: "argument": konwersja z "int" do "float", możliwa utrata danych
+C:\Users\jawor\source\repos\SFML-project\gra sfml\game.cpp(492,72): warning C4244: "argument": konwersja z "int" do "float", możliwa utrata danych
+C:\Users\jawor\source\repos\SFML-project\gra sfml\game.cpp(829,67): warning C4244: "=": konwersja z "_Ty" do "int", możliwa utrata danych
           with
           [
               _Ty=float
           ]
-C:\Users\jawor\source\repos\SFML-project\gra sfml\game.cpp(786,69): warning C4244: "=": konwersja z "_Ty" do "int", możliwa utrata danych
+C:\Users\jawor\source\repos\SFML-project\gra sfml\game.cpp(831,69): warning C4244: "=": konwersja z "_Ty" do "int", możliwa utrata danych
           with
           [
               _Ty=float
           ]
-C:\Users\jawor\source\repos\SFML-project\gra sfml\game.cpp(788,70): warning C4244: "=": konwersja z "_Ty" do "int", możliwa utrata danych
+C:\Users\jawor\source\repos\SFML-project\gra sfml\game.cpp(833,70): warning C4244: "=": konwersja z "_Ty" do "int", możliwa utrata danych
           with
           [
               _Ty=float
           ]
-C:\Users\jawor\source\repos\SFML-project\gra sfml\game.cpp(806,12): warning C4244: "argument": konwersja z "time_t" do "unsigned int", możliwa utrata danych
-  main.cpp
-  selectCarMenu.cpp
-C:\Users\jawor\source\repos\SFML-project\gra sfml\selectCarMenu.cpp(17,91): warning C4244: "argument": konwersja z "T" do "T", możliwa utrata danych
-          with
-          [
-              T=unsigned int
-          ]
-          and
-          [
-              T=float
-          ]
-C:\Users\jawor\source\repos\SFML-project\gra sfml\selectCarMenu.cpp(17,62): warning C4244: "argument": konwersja z "T" do "T", możliwa utrata danych
-          with
-          [
-              T=unsigned int
-          ]
-          and
-          [
-              T=float
-          ]
-C:\Users\jawor\source\repos\SFML-project\gra sfml\selectCarMenu.cpp(24,97): warning C4244: "argument": konwersja z "T" do "T", możliwa utrata danych
-          with
-          [
-              T=unsigned int
-          ]
-          and
-          [
-              T=float
-          ]
-C:\Users\jawor\source\repos\SFML-project\gra sfml\selectCarMenu.cpp(24,68): warning C4244: "argument": konwersja z "T" do "T", możliwa utrata danych
-          with
-          [
-              T=unsigned int
-          ]
-          and
-          [
-              T=float
-          ]
-C:\Users\jawor\source\repos\SFML-project\gra sfml\selectCarMenu.cpp(29,97): warning C4244: "argument": konwersja z "T" do "T", możliwa utrata danych
-          with
-          [
-              T=unsigned int
-          ]
-          and
-          [
-              T=float
-          ]
-C:\Users\jawor\source\repos\SFML-project\gra sfml\selectCarMenu.cpp(29,68): warning C4244: "argument": konwersja z "T" do "T", możliwa utrata danych
-          with
-          [
-              T=unsigned int
-          ]
-          and
-          [
-              T=float
-          ]
-C:\Users\jawor\source\repos\SFML-project\gra sfml\selectCarMenu.cpp(34,97): warning C4244: "argument": konwersja z "T" do "T", możliwa utrata danych
-          with
-          [
-              T=unsigned int
-          ]
-          and
-          [
-              T=float
-          ]
-C:\Users\jawor\source\repos\SFML-project\gra sfml\selectCarMenu.cpp(34,68): warning C4244: "argument": konwersja z "T" do "T", możliwa utrata danych
-          with
-          [
-              T=unsigned int
-          ]
-          and
-          [
-              T=float
-          ]
+C:\Users\jawor\source\repos\SFML-project\gra sfml\game.cpp(851,12): warning C4244: "argument": konwersja z "time_t" do "unsigned int", możliwa utrata danych
   Trwa generowanie kodu
-  3 of 612 functions ( 0.5%) were compiled, the rest were copied from previous compilation.
+  2 of 627 functions ( 0.3%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
     1 functions had inline decision re-evaluated but remain unchanged
   Zakończono generowanie kodu

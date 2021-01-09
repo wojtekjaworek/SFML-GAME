@@ -15,7 +15,7 @@ Menu::Menu(sf::RenderWindow* window)
 
 	this->menuOptions[1].setFont(this->menuFont);
 	this->menuOptions[1].setFillColor(sf::Color::White);
-	this->menuOptions[1].setString("ROZPOCZNIJ NOWA GRE");
+	this->menuOptions[1].setString("ROZPOCZNIJ GRE");
 	this->menuOptions[1].setPosition(sf::Vector2f(window->getSize().x / 2, window->getSize().y / 7 * 2));
 
 	this->menuOptions[2].setFont(this->menuFont);

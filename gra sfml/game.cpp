@@ -6,6 +6,7 @@
 #include <fstream>
 #include <string>
 #include <sstream>
+#include <Windows.h>
 
 //private functions
 void Game::initWindow()
@@ -56,6 +57,16 @@ void Game::initSelectDifficultyLevel()
 	this->selectDifficultyLevel = new SelectDifficultyLevel(window);
 }
 
+void Game::initSelectCarMenu()
+{
+	this->selectCarMenu = new SelectCarMenu(window);
+}
+
+void Game::initSelectTrackMenu()
+{
+	this->selectTrackMenu = new SelectTrackMenu(window);
+}
+
 void Game::initClocks()
 {
 
@@ -69,10 +80,7 @@ void Game::initBackground()
 	this->background.setTexture(*this->textures["BACKGROUND"]);
 }
 
-void Game::initSelectCarMenu()
-{
-	this->selectCarMenu = new SelectCarMenu(window);
-}
+
 
 
 
@@ -109,7 +117,7 @@ void Game::updatePollEvents()
 		}
 
 
-		if (this->mainMenuFlag == true && this->selectDifficultyLevelFlag == false) { //select desired position in main menu
+		if (this->mainMenuFlag == true && this->selectTrackMenuFlag == false && this->selectDifficultyLevelFlag == false && this->selectCarMenuFlag == false) { //select desired position in main menu
 
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
 				this->mainMenu->selectUp();
@@ -123,15 +131,20 @@ void Game::updatePollEvents()
 
 		
 		
-		if (this->mainMenuFlag == true && this->selectDifficultyLevelFlag == false && this->mainMenu->selectedIndex == 0) { 
+		if (this->mainMenuFlag == true && this->selectTrackMenuFlag == false && this->selectDifficultyLevelFlag == false && this->selectCarMenuFlag == false && this->mainMenu->selectedIndex == 0) { // wczytanie zapisu
 			switch (event.type) {
 			case sf::Event::KeyReleased:
 				if (event.key.code == sf::Keyboard::Enter) {
 
-					this->loadSavedGame();
-					this->initLoadedVariables();
+					if (this->isDataLoaded == false) {
+						this->loadSavedGame();
+						this->initLoadedVariables();
+					}
+					else if (this->isDataLoaded == true) {
+						std::cout << "GRA ZOSTALA JUZ WCZYTANA" << std::endl;
+					}
 
-					this->mainMenuFlag = false;
+					this->mainMenuFlag = true;
 
 					this->lifeClock.restart();
 					this->movementSpeedClock.restart();
@@ -143,7 +156,7 @@ void Game::updatePollEvents()
 		}
 
 		
-		if (this->mainMenuFlag == true && this->selectDifficultyLevelFlag == false && this->mainMenu->selectedIndex == 1) { // start gry
+		if (this->mainMenuFlag == true && this->selectTrackMenuFlag == false && this->selectDifficultyLevelFlag == false && this->selectCarMenuFlag == false && this->mainMenu->selectedIndex == 1) { // start gry
 			switch (event.type) {
 			case sf::Event::KeyReleased:
 				if (event.key.code == sf::Keyboard::Enter) {
@@ -158,7 +171,7 @@ void Game::updatePollEvents()
 
 
 		
-		if (this->mainMenuFlag == true && this->selectDifficultyLevelFlag == false && this->mainMenu->selectedIndex == 2) { // wybor auta
+		if (this->mainMenuFlag == true && this->selectTrackMenuFlag == false && this->selectDifficultyLevelFlag == false && this->selectCarMenuFlag == false && this->mainMenu->selectedIndex == 2) { // wybor auta
 			switch (event.type) {
 			case sf::Event::KeyReleased:
 				if (event.key.code == sf::Keyboard::Enter) {
@@ -193,35 +206,27 @@ void Game::updatePollEvents()
 
 					}
 				}
+
+				if (this->selectCarMenu->selectedIndex == 2) {
+					if (event.key.code == sf::Keyboard::Enter) {
+						this->selectCarMenuFlag = false;
+						this->selectCarMenu->reset();
+						this->selectCarMenu->selectedIndex = 0;
+
+					}
+				}
 			}
-
-
-
-
-
-
-
-
-			
-
 		}
 
 
 
-		if (this->mainMenuFlag == true && this->selectDifficultyLevelFlag == false && this->mainMenu->selectedIndex == 3) { // kolejne menu, do dokonczenia
+		if (this->mainMenuFlag == true && this->selectTrackMenuFlag == false && this->selectDifficultyLevelFlag == false && this->selectCarMenuFlag == false && this->mainMenu->selectedIndex == 3) { // wybor toru
 			switch (event.type) {
 			case sf::Event::KeyReleased:
 				if (event.key.code == sf::Keyboard::Enter) {
-					/*
-
-
-
-					jeszcze nie zrobione,
-					tutaj bedzie kolejne menu wyboru
-
-
-
-					*/
+					if (event.key.code == sf::Keyboard::Enter) {
+						this->selectTrackMenuFlag = true;
+					}
 				}
 			}
 		}
@@ -229,8 +234,47 @@ void Game::updatePollEvents()
 
 
 
+		if (this->selectTrackMenuFlag == true) { // nawigowanie w podmenu wyboru toru
 
-		if (this->mainMenuFlag == true && this->selectDifficultyLevelFlag == false && this->mainMenu->selectedIndex == 4) {
+			switch (event.type) {
+			case sf::Event::KeyReleased:
+				if (event.key.code == sf::Keyboard::Up) {
+					this->selectTrackMenu->selectUp();
+				}
+
+				if (event.key.code == sf::Keyboard::Down) {
+					this->selectTrackMenu->selectDown();
+				}
+
+
+				if (this->selectTrackMenu->selectedIndex == 0) {
+					if (event.key.code == sf::Keyboard::Enter) {
+						this->selectTrackMenu->next();
+					}
+				}
+
+				if (this->selectTrackMenu->selectedIndex == 1) {
+					if (event.key.code == sf::Keyboard::Enter) {
+						this->selectTrackMenu->previous();
+
+					}
+				}
+
+				if (this->selectTrackMenu->selectedIndex == 2) {
+					if (event.key.code == sf::Keyboard::Enter) {
+						this->selectTrackMenuFlag = false;
+						this->selectTrackMenu->reset();
+						this->selectTrackMenu->selectedIndex = 0;
+
+					}
+				}
+			}
+		}
+
+
+
+
+		if (this->mainMenuFlag == true && this->selectDifficultyLevelFlag == false && this->selectCarMenuFlag == false && this->mainMenu->selectedIndex == 4) { // wybor trudnosci
 			switch (event.type) {
 			case sf::Event::KeyReleased:
 				if (event.key.code == sf::Keyboard::Enter) {
@@ -265,24 +309,18 @@ void Game::updatePollEvents()
 
 					}
 				}
-			}
 
+				if (this->selectDifficultyLevel->selectedIndex == 1) {
+					if (event.key.code == sf::Keyboard::Enter) {
+						this->selectDifficultyLevelFlag = false;
+						this->selectDifficultyLevel->reset();
+						this->selectDifficultyLevel->selectedIndex = 0;
 
-
-			
-		}
-
-
-
-		if (this->mainMenuFlag == true && this->selectDifficultyLevelFlag == true && this->selectDifficultyLevel->selectedIndex == 1) {
-			switch (event.type) {
-			case sf::Event::KeyReleased:
-				if (event.key.code == sf::Keyboard::Enter) {
-					this->selectDifficultyLevelFlag = false;
-					this->selectDifficultyLevel->selectedIndex = 0;
+					}
 
 				}
 			}
+
 		}
 
 
@@ -371,7 +409,7 @@ void Game::updatePollEvents()
 			}
 		}
 
-		if (this->pauseMenuFlag == true && this->pauseMenu->selectedIndex == 2) {
+		if (this->pauseMenuFlag == true && this->pauseMenu->selectedIndex == 2) { // zamkniecie gry z menu pauzy
 			switch (event.type) {
 			case sf::Event::KeyReleased:
 				if (event.key.code == sf::Keyboard::Enter) {
@@ -555,6 +593,11 @@ void Game::showSelectCarMenu(sf::RenderWindow* window)
 	this->selectCarMenu->drawMenu(window);
 }
 
+void Game::showSelectTrackMenu(sf::RenderWindow* window)
+{
+	this->selectTrackMenu->drawMenu(window);
+}
+
 
 
 void Game::saveGame()
@@ -576,7 +619,7 @@ void Game::saveGame()
 
 }
 
-void Game::loadSavedGame() // NIEDOKOÑCZONA FUNKCJA
+void Game::loadSavedGame() 
 {
 	std::ifstream file;
 	file.open("save.csv");
@@ -626,9 +669,7 @@ void Game::loadSavedGame() // NIEDOKOÑCZONA FUNKCJA
 		std::cout << this->loadedDataFromSave[i].first << ":  " << this->loadedDataFromSave[i].second[0] << std::endl;
 	}
 
-
-
-
+	this->isDataLoaded = true;
 }
 
 void Game::update()
@@ -639,7 +680,7 @@ void Game::update()
 	
 
 
-	if (this->pauseMenuFlag == false && this->selectDifficultyLevelFlag == false) {
+	if (this->pauseMenuFlag == false && this->mainMenuFlag == false) {
 		this->updateObstacles();
 		this->updateObstaclesSpeed();
 		this->updateObstalesPosition();
@@ -654,16 +695,20 @@ void Game::render()
 {
 	this->window->clear();
 
-	if (this->mainMenuFlag == true && this->selectDifficultyLevelFlag == false && this->selectCarMenuFlag == false) {
+	if (this->mainMenuFlag == true && this->selectDifficultyLevelFlag == false && this->selectCarMenuFlag == false && this->selectTrackMenuFlag == false) {
 		this->showMenu(window);
 	}
 
-	if (this->mainMenuFlag == true  && this->selectDifficultyLevelFlag == true && this->selectCarMenuFlag == false) {
+	if (this->mainMenuFlag == true && this->selectDifficultyLevelFlag == true && this->selectCarMenuFlag == false && this->selectTrackMenuFlag == false) {
 		this->showSelectDifficultyLevelMenu(window);
 	}
 
-	if (this->mainMenuFlag == true && this->selectCarMenuFlag == true && this->selectDifficultyLevelFlag == false) {
+	if (this->mainMenuFlag == true && this->selectCarMenuFlag == true && this->selectDifficultyLevelFlag == false && this->selectTrackMenuFlag == false) {
 		this->showSelectCarMenu(window);
+	}
+
+	if (this->mainMenuFlag == true && this->selectTrackMenuFlag == true && this->selectDifficultyLevelFlag == false && this->selectCarMenuFlag == false) {
+		this->showSelectTrackMenu(window);
 	}
 
 	if (this->mainMenuFlag == false && this->pauseMenuFlag == true) {
@@ -813,8 +858,10 @@ Game::Game()
 	this->initMainMenu();
 	this->initPauseMenu();
 	this->initSelectDifficultyLevel();
-	this->initBackground();
 	this->initSelectCarMenu();
+	this->initSelectTrackMenu();
+	this->initBackground();
+	
 }
 
 Game::~Game()

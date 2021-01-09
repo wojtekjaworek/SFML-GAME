@@ -14,6 +14,7 @@ public:
 	void selectDown();
 	int selectLeft();
 	int selectRight();
+	void reset();
 	int selectedIndex;
 	int selectedDiffIndex;
 	int diffLevel;

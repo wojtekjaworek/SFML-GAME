@@ -109,3 +109,10 @@ void SelectCarMenu::previous()
 
 	}
 }
+
+void SelectCarMenu::reset()
+{
+	this->menuOptions[0].setFillColor(sf::Color::Red);
+	this->menuOptions[1].setFillColor(sf::Color::White);
+	this->menuOptions[2].setFillColor(sf::Color::White);
+}

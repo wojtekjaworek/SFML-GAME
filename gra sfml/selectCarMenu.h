@@ -14,6 +14,7 @@ public:
 	void selectDown();
 	void next();
 	void previous();
+	void reset();
 	void initTextures();
 	int selectedIndex;
 	int selectedCarIndex;

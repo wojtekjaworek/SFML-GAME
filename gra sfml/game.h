@@ -7,6 +7,7 @@
 #include "pauseMenu.h"
 #include "selectDifficultyLevel.h"
 #include "selectCarMenu.h"
+#include "selectTrackMenu.h"
 #include <map>
 #include <vector>
 #include <fstream>
@@ -40,6 +41,9 @@ private:
 	bool selectCarMenuFlag = false;
 	int selectedCar = 0;
 
+	SelectTrackMenu* selectTrackMenu;
+	bool selectTrackMenuFlag = false;
+
 
 	//stuff 
 	sf::Clock obstacleSpawnClock;
@@ -68,6 +72,8 @@ private:
 
 	loadSavedData loadSaved;
 
+	bool isDataLoaded = false;
+
 
 	//player 
 	Player* player; //pointer to player to control it on the screen
@@ -94,9 +100,11 @@ private:
 	void initMainMenu();
 	void initPauseMenu();
 	void initSelectDifficultyLevel();
+	void initSelectCarMenu();
+	void initSelectTrackMenu();
 	void initClocks();
 	void initBackground();
-	void initSelectCarMenu();
+	
 
 
 
@@ -122,6 +130,7 @@ public:
 	void showPauseMenu(sf::RenderWindow* window);
 	void showSelectDifficultyLevelMenu(sf::RenderWindow* window);
 	void showSelectCarMenu(sf::RenderWindow* window);
+	void showSelectTrackMenu(sf::RenderWindow* window);
 	void saveGame();
 	void loadSavedGame();
 	void update();

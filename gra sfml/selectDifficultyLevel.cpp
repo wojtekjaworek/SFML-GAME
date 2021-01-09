@@ -64,6 +64,13 @@ int SelectDifficultyLevel::selectRight()
 
 }
 
+void SelectDifficultyLevel::reset()
+{
+	this->menuOptions[0].setFillColor(sf::Color::Red);
+	this->menuOptions[1].setFillColor(sf::Color::White);
+
+}
+
 void SelectDifficultyLevel::selectUp()
 {
 
