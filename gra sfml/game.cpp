@@ -25,6 +25,15 @@ void Game::initTextures()
 	this->textures["BACKGROUND"] = new sf::Texture();
 	this->textures["BACKGROUND"]->loadFromFile("textures/background.png");
 
+
+	for (int i = 0;i < 4;i++) { // number of tracks in folder!!!!!!!!!!!!!
+
+		this->textures["TRACK" + std::to_string(i)] = new sf::Texture();
+		this->textures["TRACK" + std::to_string(i)]->loadFromFile("textures/track" + std::to_string(i) + ".png");
+
+
+	}
+
 }
 
 
@@ -37,7 +46,7 @@ void Game::initStuff()
 
 void Game::initPlayer(sf::RenderWindow *window)
 {
-	this->player = new Player(this->window);
+	this->player = new Player(window);
 
 }
 
@@ -77,7 +86,7 @@ void Game::initClocks()
 
 void Game::initBackground()
 {
-	this->background.setTexture(*this->textures["BACKGROUND"]);
+	this->background.setTexture(*this->textures["TRACK"  + std::to_string(this->selectedTrack)]);
 }
 
 
@@ -85,6 +94,11 @@ void Game::initBackground()
 void Game::initCollisionDetection()
 {
 	this->collisionDetection = new Collision(this->player, this->obstacles);
+}
+
+void Game::initLifebar()
+{
+	this->lifebar = new Lifebar(this->window);
 }
 
 
@@ -168,6 +182,7 @@ void Game::updatePollEvents()
 			case sf::Event::KeyReleased:
 				if (event.key.code == sf::Keyboard::Enter) {
 					this->mainMenuFlag = false;
+					this->lifebarFlag = true;
 					this->lifeClock.restart();
 					this->movementSpeedClock.restart();
 					this->obstacleSpawnClock.restart();
@@ -203,13 +218,15 @@ void Game::updatePollEvents()
 
 				if (this->selectCarMenu->selectedIndex == 0) {
 					if (event.key.code == sf::Keyboard::Enter) {
-						this->selectCarMenu->next();
+						this->selectedCar = this->selectCarMenu->next();
+						this->updatePlayer();
 					}
 				}
 
 				if (this->selectCarMenu->selectedIndex == 1) {
 					if (event.key.code == sf::Keyboard::Enter) {
-						this->selectCarMenu->previous();
+						this->selectedCar = this->selectCarMenu->previous();
+						this->updatePlayer();
 
 					}
 				}
@@ -219,6 +236,7 @@ void Game::updatePollEvents()
 						this->selectCarMenuFlag = false;
 						this->selectCarMenu->reset();
 						this->selectCarMenu->selectedIndex = 0;
+						std::cout << "selected car: " << this->selectedCar << std::endl;
 
 					}
 				}
@@ -256,13 +274,13 @@ void Game::updatePollEvents()
 
 				if (this->selectTrackMenu->selectedIndex == 0) {
 					if (event.key.code == sf::Keyboard::Enter) {
-						this->selectTrackMenu->next();
+						this->selectedTrack = this->selectTrackMenu->next();
 					}
 				}
 
 				if (this->selectTrackMenu->selectedIndex == 1) {
 					if (event.key.code == sf::Keyboard::Enter) {
-						this->selectTrackMenu->previous();
+						this->selectedTrack = this->selectTrackMenu->previous();
 
 					}
 				}
@@ -272,6 +290,7 @@ void Game::updatePollEvents()
 						this->selectTrackMenuFlag = false;
 						this->selectTrackMenu->reset();
 						this->selectTrackMenu->selectedIndex = 0;
+						std::cout << "selected track: " << this->selectedTrack << std::endl;
 
 					}
 				}
@@ -322,6 +341,7 @@ void Game::updatePollEvents()
 						this->selectDifficultyLevelFlag = false;
 						this->selectDifficultyLevel->reset();
 						this->selectDifficultyLevel->selectedIndex = 0;
+						std::cout << "selected diff level: " << this->diffLevel << std::endl;
 
 					}
 
@@ -580,6 +600,17 @@ void Game::updateObstalesPosition()
 
 }
 
+void Game::updatePlayer()
+{
+	this->player->update(this->selectedCar);
+}
+
+void Game::updateBackground()
+{
+	this->background.setTexture(*this->textures["TRACK" + std::to_string(this->selectedTrack)]);
+}
+
+
 void Game::resetTime()
 {
 	this->lifeTime = sf::seconds(0);
@@ -610,6 +641,11 @@ void Game::showSelectCarMenu(sf::RenderWindow* window)
 void Game::showSelectTrackMenu(sf::RenderWindow* window)
 {
 	this->selectTrackMenu->drawMenu(window);
+}
+
+void Game::showLifebar(sf::RenderWindow* window, int lifeCount)
+{
+	this->lifebar->drawMenu(window, lifeCount);
 }
 
 
@@ -691,14 +727,19 @@ void Game::loadSavedGame()
 void Game::lookForCollision()
 {
 	this->indexOfCollidingObstacle = this->collisionDetection->collidingIndex();
+	this->collisionBool = this->collisionDetection->collisionBool();
 
-	std::cout << "index: " << this->indexOfCollidingObstacle << std::endl;
+	//std::cout << "index: " << this->indexOfCollidingObstacle << std::endl;
 	
 
 }
 
 void Game::processCollision()
 {
+
+
+	this->lifeCount--;
+
 	if (this->indexOfCollidingObstacle != 9999) {
 		delete this->obstacles[this->indexOfCollidingObstacle];
 		this->obstacles.erase(this->obstacles.begin() + this->indexOfCollidingObstacle);
@@ -722,7 +763,9 @@ void Game::update()
 		this->updateObstaclesSpeed();
 		this->updateObstalesPosition();
 		this->lookForCollision();
-		this->processCollision();
+		if (this->collisionBool == true) {
+			this->processCollision();
+		}
 
 	}
 
@@ -762,7 +805,9 @@ void Game::render()
 		//draw game here
 		this->window->draw(this->background);
 
-		this->player->render(*this->window); // decide where te render player,in this case: on the window (which is a pointer so * )
+		this->showLifebar(this->window, this->lifeCount);
+
+		this->player->render(*this->window); 
 
 		for (auto* obstacle : this->obstacles) {
 			obstacle->render(this->window);
@@ -902,6 +947,7 @@ Game::Game()
 	this->initSelectTrackMenu();
 	this->initBackground();
 	this->initCollisionDetection();
+	this->initLifebar();
 	
 }
 

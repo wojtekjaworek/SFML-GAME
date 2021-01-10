@@ -87,7 +87,7 @@ void SelectCarMenu::selectDown()
 
 }
 
-void SelectCarMenu::next()
+int SelectCarMenu::next()
 {
 	std::cout << "index przed: " << this->selectedCarIndex << std::endl;
 
@@ -96,9 +96,10 @@ void SelectCarMenu::next()
 		this->carImage.setTexture(*this->textures["PLAYER" + std::to_string(this->selectedCarIndex)]);
 		std::cout << "index po: " << this->selectedCarIndex << std::endl;
 	}
+	return this->selectedCarIndex;
 }
 
-void SelectCarMenu::previous()
+int SelectCarMenu::previous()
 {
 	std::cout << "index przed: " << this->selectedCarIndex << std::endl;
 
@@ -108,6 +109,8 @@ void SelectCarMenu::previous()
 		std::cout << "index po: " << this->selectedCarIndex << std::endl;
 
 	}
+	return this->selectedCarIndex;
+
 }
 
 void SelectCarMenu::reset()

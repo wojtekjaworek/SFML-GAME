@@ -16,6 +16,7 @@ private:
 
 
 	float movementSpeed;
+	int textureIndex;
 
 	//functions
 	void initTexture();
@@ -40,7 +41,7 @@ public:
 	//functions
 	sf::Vector2f getPos();
 	void move(const float dirX, const float dirY);
-	void update();
+	void update(int textureIndex);
 	void render(sf::RenderTarget& target);
 };
 

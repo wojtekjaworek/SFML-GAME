@@ -31,6 +31,23 @@ int Collision::collidingIndex()
 	
 }
 
+bool Collision::collisionBool()
+{
+	if (this->obstacles.size() > 0) {
+		for (int i = 0; i < this->obstacles.size(); i++) {
+			if (this->player.getGlobalBounds().intersects(this->obstacles[i]->getBounds())) {
+				return true;
+			}
+			if ((i == this->obstacles.size() - 1) && (!this->player.getGlobalBounds().intersects(this->obstacles[i]->getBounds()))) {
+				return false;
+			}
+		}
+	}
+	else {
+		return false;
+	}
+}
+
 void Collision::update(Player* player, std::vector<Obstacle*> obstacles)
 {
 	this->player = player->getSprite();

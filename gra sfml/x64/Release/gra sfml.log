@@ -1,41 +1,12 @@
-﻿  game.cpp
-C:\Users\jawor\source\repos\SFML-project\gra sfml\game.cpp(473,59): warning C4838: konwersja z „T” do „int” wymaga konwersji zawężającej
+﻿  player.cpp
+C:\Users\jawor\source\repos\SFML-project\gra sfml\player.cpp(40,46): warning C4244: "argument": konwersja z "T" do "float", możliwa utrata danych
           with
           [
               T=unsigned int
           ]
-C:\Users\jawor\source\repos\SFML-project\gra sfml\game.cpp(473,94): warning C4838: konwersja z „T” do „int” wymaga konwersji zawężającej
-          with
-          [
-              T=unsigned int
-          ]
-C:\Users\jawor\source\repos\SFML-project\gra sfml\game.cpp(473,129): warning C4838: konwersja z „T” do „int” wymaga konwersji zawężającej
-          with
-          [
-              T=unsigned int
-          ]
-C:\Users\jawor\source\repos\SFML-project\gra sfml\game.cpp(477,72): warning C4244: "argument": konwersja z "int" do "float", możliwa utrata danych
-C:\Users\jawor\source\repos\SFML-project\gra sfml\game.cpp(499,72): warning C4244: "argument": konwersja z "int" do "float", możliwa utrata danych
-C:\Users\jawor\source\repos\SFML-project\gra sfml\game.cpp(869,67): warning C4244: "=": konwersja z "_Ty" do "int", możliwa utrata danych
-          with
-          [
-              _Ty=float
-          ]
-C:\Users\jawor\source\repos\SFML-project\gra sfml\game.cpp(871,69): warning C4244: "=": konwersja z "_Ty" do "int", możliwa utrata danych
-          with
-          [
-              _Ty=float
-          ]
-C:\Users\jawor\source\repos\SFML-project\gra sfml\game.cpp(873,70): warning C4244: "=": konwersja z "_Ty" do "int", możliwa utrata danych
-          with
-          [
-              _Ty=float
-          ]
-C:\Users\jawor\source\repos\SFML-project\gra sfml\game.cpp(891,12): warning C4244: "argument": konwersja z "time_t" do "unsigned int", możliwa utrata danych
-  main.cpp
   Trwa generowanie kodu
-  4 of 672 functions ( 0.6%) were compiled, the rest were copied from previous compilation.
-    1 functions were new in current compilation
-    1 functions had inline decision re-evaluated but remain unchanged
+  4 of 685 functions ( 0.6%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    34 functions had inline decision re-evaluated but remain unchanged
   Zakończono generowanie kodu
   gra sfml.vcxproj -> C:\Users\jawor\source\repos\SFML-project\x64\Release\gra sfml.exe

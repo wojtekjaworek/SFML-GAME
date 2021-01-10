@@ -18,6 +18,7 @@ public:
 	virtual ~Collision();
 
 	int collidingIndex();
+	bool collisionBool();
 	int index;
 	void update(Player* player, std::vector<Obstacle*> obstacles);
 };

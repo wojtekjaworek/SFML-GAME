@@ -8,17 +8,16 @@
 //private functions
 void Player::initTexture()
 {
-	//load from file, if not problem occurs returns error message
-	if (!this->texture.loadFromFile("textures/test.png")) {
-		std::cout << "Error: player.cpp -> initTexture():: texture file not loaded!"<< std::endl;
-	}
-
+	
 
 
 	for (int i = 0;i < 4;i++) {
 
 		this->textures["PLAYER" + std::to_string(i)] = new sf::Texture();
-		this->textures["PLAYER" + std::to_string(i)]->loadFromFile("textures/player" + std::to_string(i) + ".png");
+		if (!this->textures["PLAYER" + std::to_string(i)]->loadFromFile("textures/player" + std::to_string(i) + ".png")) {
+			std::cout << "ERROR player texture not loaded!" << std::endl;
+		}
+		
 
 
 	}
@@ -29,7 +28,7 @@ void Player::initTexture()
 
 void Player::initSprite()
 {
-	this->sprite.setTexture(this->texture);
+	this->sprite.setTexture(*this->textures["PLAYER" + std::to_string(this->textureIndex)]);
 
 	//resize the sprite, original texture will be high resolution, so it have to fit on the screen and keep desired size
 	this->sprite.scale(1.f, 1.f);
@@ -68,8 +67,9 @@ void Player::move(const float dirX, const float dirY)
 	this->sprite.move(this->movementSpeed * dirX, this->movementSpeed * dirY);
 }
 
-void Player::update()
+void Player::update(int textureIndex)
 {
+	this->sprite.setTexture(*this->textures["PLAYER" + std::to_string(textureIndex)]);
 }
 
 void Player::render(sf::RenderTarget& target)

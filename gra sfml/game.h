@@ -8,6 +8,7 @@
 #include "selectDifficultyLevel.h"
 #include "selectCarMenu.h"
 #include "selectTrackMenu.h"
+#include "lifebar.h"
 #include <map>
 #include <vector>
 #include <fstream>
@@ -16,11 +17,11 @@ class Game {
 
 private:
 
-	//window
-	sf::RenderWindow* window; //pointer to window
+	
+	sf::RenderWindow* window; 
 
-	//resourses, obstacles etc
-	std::map<std::string, sf::Texture* > textures; //name of texture and texture itself, easy to navigate
+	//resourses
+	std::map<std::string, sf::Texture* > textures; 
 	std::vector<Obstacle*> obstacles;
 
 	std::vector<std::pair<std::string, std::vector<float>>> loadedDataFromSave;
@@ -35,7 +36,7 @@ private:
 
 	SelectDifficultyLevel* selectDifficultyLevel;
 	bool selectDifficultyLevelFlag = false;
-	int diffLevel = 0; //int in range 0,1,2,3, where 0 = easy, 1 = mid, 2 = hard, 3 = extreme
+	int diffLevel = 0; 
 
 	SelectCarMenu* selectCarMenu;
 	bool selectCarMenuFlag = false;
@@ -43,9 +44,10 @@ private:
 
 	SelectTrackMenu* selectTrackMenu;
 	bool selectTrackMenuFlag = false;
+	int selectedTrack = 0;
 
 
-	//stuff 
+	 
 	sf::Clock obstacleSpawnClock;
 	sf::Time obstacleSpawnTime;
 	float obstacleSpawnTime_temp;
@@ -76,7 +78,7 @@ private:
 
 
 	//player 
-	Player* player; //pointer to player to control it on the screen
+	Player* player; 
 
 	
 
@@ -84,6 +86,16 @@ private:
 	Collision* collisionDetection;
 
 	int indexOfCollidingObstacle;
+	bool collisionBool = false;
+
+
+
+	Lifebar* lifebar;
+	bool lifebarFlag = false;
+	int lifeCount = 5;
+
+
+
 
 	//ZMIENNE DO TESTOWYCH FUNKCJI
 
@@ -100,7 +112,7 @@ private:
 	void initWindow();
 	void initTextures();
 	void initStuff(); // initialize other stuff like fonts etc.
-	void initPlayer(sf::RenderWindow *window);
+	void initPlayer(sf::RenderWindow *window); // textureIndex is the same as selectedCar
 	void initMainMenu();
 	void initPauseMenu();
 	void initSelectDifficultyLevel();
@@ -109,7 +121,7 @@ private:
 	void initClocks();
 	void initBackground();
 	void initCollisionDetection();
-	
+	void initLifebar();
 
 
 
@@ -130,12 +142,15 @@ public:
 	void updateObstacles();
 	void updateObstaclesSpeed();
 	void updateObstalesPosition();
+	void updatePlayer();
+	void updateBackground();
 	void resetTime();
 	void showMenu(sf::RenderWindow* window);
 	void showPauseMenu(sf::RenderWindow* window);
 	void showSelectDifficultyLevelMenu(sf::RenderWindow* window);
 	void showSelectCarMenu(sf::RenderWindow* window);
 	void showSelectTrackMenu(sf::RenderWindow* window);
+	void showLifebar(sf::RenderWindow* window, int lifeCount);
 	void saveGame();
 	void loadSavedGame();
 	void lookForCollision();

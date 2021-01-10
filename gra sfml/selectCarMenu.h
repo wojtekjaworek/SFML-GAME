@@ -12,8 +12,8 @@ public:
 	void drawMenu(sf::RenderWindow* window);
 	void selectUp(); // navigate inside menu
 	void selectDown();
-	void next();
-	void previous();
+	int next();
+	int previous();
 	void reset();
 	void initTextures();
 	int selectedIndex;
