@@ -9,6 +9,11 @@ const sf::FloatRect Obstacle::getBounds()
 	return this->shape.getGlobalBounds();
 }
 
+const sf::Vector2f Obstacle::getPos()
+{
+	return this->shape.getPosition();
+}
+
 
 
 

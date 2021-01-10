@@ -34,6 +34,7 @@ public:
 
 	//accessor
 	const sf::FloatRect getBounds();
+	const sf::Sprite getSprite();
 
 
 	//functions

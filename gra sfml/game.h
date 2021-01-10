@@ -81,6 +81,10 @@ private:
 	
 
 
+	Collision* collisionDetection;
+
+	int indexOfCollidingObstacle;
+
 	//ZMIENNE DO TESTOWYCH FUNKCJI
 
 	int numberOfUnlockedCars = 0;
@@ -104,6 +108,7 @@ private:
 	void initSelectTrackMenu();
 	void initClocks();
 	void initBackground();
+	void initCollisionDetection();
 	
 
 
@@ -120,8 +125,8 @@ public:
 	void run();
 
 
-	void updatePollEvents(); //speaks for itself
-	void updateInput(); // control player class from keyboard etc
+	void updatePollEvents(); 
+	void updateInput(); 
 	void updateObstacles();
 	void updateObstaclesSpeed();
 	void updateObstalesPosition();
@@ -133,6 +138,8 @@ public:
 	void showSelectTrackMenu(sf::RenderWindow* window);
 	void saveGame();
 	void loadSavedGame();
+	void lookForCollision();
+	void processCollision(); // kod wykonywany po zderzeniu z przeszkoda
 	void update();
 	void render();
 	void pauseGame();

@@ -22,6 +22,7 @@ public:
 
 	//accessor
 	const sf::FloatRect getBounds();
+	const sf::Vector2f getPos();
 
 	//functions
 	void update();

@@ -43,28 +43,28 @@ void Game::initPlayer(sf::RenderWindow *window)
 
 void Game::initMainMenu()
 {
-	this->mainMenu = new Menu(window);
+	this->mainMenu = new Menu(this->window);
 
 }
 
 void Game::initPauseMenu()
 {
-	this->pauseMenu = new PauseMenu(window);
+	this->pauseMenu = new PauseMenu(this->window);
 }
 
 void Game::initSelectDifficultyLevel() 
 {
-	this->selectDifficultyLevel = new SelectDifficultyLevel(window);
+	this->selectDifficultyLevel = new SelectDifficultyLevel(this->window);
 }
 
 void Game::initSelectCarMenu()
 {
-	this->selectCarMenu = new SelectCarMenu(window);
+	this->selectCarMenu = new SelectCarMenu(this->window);
 }
 
 void Game::initSelectTrackMenu()
 {
-	this->selectTrackMenu = new SelectTrackMenu(window);
+	this->selectTrackMenu = new SelectTrackMenu(this->window);
 }
 
 void Game::initClocks()
@@ -78,6 +78,13 @@ void Game::initClocks()
 void Game::initBackground()
 {
 	this->background.setTexture(*this->textures["BACKGROUND"]);
+}
+
+
+
+void Game::initCollisionDetection()
+{
+	this->collisionDetection = new Collision(this->player, this->obstacles);
 }
 
 
@@ -551,7 +558,10 @@ void Game::updateObstalesPosition()
 {
 	unsigned int i = 0;
 	for (auto* obstacle : this->obstacles) {
+
 		obstacle->update();
+
+
 
 
 		//delete obstacle when comes to the edge of the window
@@ -564,6 +574,10 @@ void Game::updateObstalesPosition()
 
 		i++;
 	}
+	this->collisionDetection->update(this->player, this->obstacles);
+
+
+
 }
 
 void Game::resetTime()
@@ -672,11 +686,34 @@ void Game::loadSavedGame()
 	this->isDataLoaded = true;
 }
 
+
+
+void Game::lookForCollision()
+{
+	this->indexOfCollidingObstacle = this->collisionDetection->collidingIndex();
+
+	std::cout << "index: " << this->indexOfCollidingObstacle << std::endl;
+	
+
+}
+
+void Game::processCollision()
+{
+	if (this->indexOfCollidingObstacle != 9999) {
+		delete this->obstacles[this->indexOfCollidingObstacle];
+		this->obstacles.erase(this->obstacles.begin() + this->indexOfCollidingObstacle);
+		this->indexOfCollidingObstacle = 9999;
+	}
+}
+
+
+
 void Game::update()
 {
 	
 	this->updatePollEvents();
 	this->updateInput();
+	
 	
 
 
@@ -684,6 +721,9 @@ void Game::update()
 		this->updateObstacles();
 		this->updateObstaclesSpeed();
 		this->updateObstalesPosition();
+		this->lookForCollision();
+		this->processCollision();
+
 	}
 
 
@@ -861,6 +901,7 @@ Game::Game()
 	this->initSelectCarMenu();
 	this->initSelectTrackMenu();
 	this->initBackground();
+	this->initCollisionDetection();
 	
 }
 

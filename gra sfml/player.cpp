@@ -48,6 +48,11 @@ const sf::FloatRect Player::getBounds()
 	return this->sprite.getGlobalBounds();
 }
 
+const sf::Sprite Player::getSprite()
+{
+	return this->sprite;
+}
+
 
 //public functions
 
