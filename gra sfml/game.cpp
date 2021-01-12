@@ -185,7 +185,7 @@ void Game::updatePollEvents()
 
 					if (this->isDataLoaded == false) {
 						this->loadSavedGame();
-						this->initLoadedVariables();
+						//this->initLoadedVariables();
 					}
 					else if (this->isDataLoaded == true) {
 						std::cout << "GRA ZOSTALA JUZ WCZYTANA" << std::endl;
@@ -693,19 +693,23 @@ void Game::saveGame()
 		save << this->totalScore <<","<< this->lifeTime.asSeconds() <<","<< this->movementSpeedTime.asSeconds() << "," << this->obstacleSpawnTime.asSeconds() <<","
 			 << this->numberOfUnlockedCars << "," << this->numberOfUnlockedTracks << "," << this->UnlockedDifficultyLevel << std::endl;
 		save.close();
+		std::cout << "Gra zapisana!" << std::endl;
 	}
 
 }
 
 void Game::loadSavedGame() 
 {
+
+
+
 	std::ifstream file;
 	file.open("save.csv");
 	if (!file) {
-		perror("ERROR: nie mozna zaladowac save'a");
+		std::cout << "Nie mozna zaladowac save'a!" << std::endl;
 	}
 
-	if (file) {
+	else if (file) {
 		std::string line, colname;
 		float copy;
 		std::getline(file, line); // get first line of file
@@ -737,23 +741,22 @@ void Game::loadSavedGame()
 
 		file.close();
 
+
+
+		std::cout << "LOADED DATA" << std::endl;
+		std::cout << this->loadedDataFromSave.size() << std::endl;
+
+		for (int i = 0; i <= this->loadedDataFromSave.size() - 1; i++) {
+			std::cout << this->loadedDataFromSave[i].first << ":  " << this->loadedDataFromSave[i].second[0] << std::endl;
+		}
+
+
+		this->numberOfUnlockedCars = this->loadedDataFromSave[4].second[0];
+		this->numberOfUnlockedTracks = this->loadedDataFromSave[5].second[0];
+		this->UnlockedDifficultyLevel = this->loadedDataFromSave[6].second[0];
+		this->totalScore = this->loadedDataFromSave[0].second[0];
+
 	}
-
-
-	std::cout << "LOADED DATA" << std::endl;
-	std::cout << this->loadedDataFromSave.size() << std::endl;
-
-	for (int i = 0; i <= this->loadedDataFromSave.size() - 1; i++) {
-		std::cout << this->loadedDataFromSave[i].first << ":  " << this->loadedDataFromSave[i].second[0] << std::endl;
-	}
-
-
-	this->numberOfUnlockedCars = this->loadedDataFromSave[4].second[0];
-	this->numberOfUnlockedTracks = this->loadedDataFromSave[5].second[0];
-	this->UnlockedDifficultyLevel = this->loadedDataFromSave[6].second[0];
-	this->totalScore = this->loadedDataFromSave[0].second[0];
-
-
 
 
 
