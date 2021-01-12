@@ -24,7 +24,6 @@ private:
 	std::map<std::string, sf::Texture* > textures; 
 	std::vector<Obstacle*> obstacles;
 
-	std::vector<std::pair<std::string, std::vector<float>>> loadedDataFromSave;
 
 	sf::Sprite background;
 
@@ -73,6 +72,8 @@ private:
 	};
 
 	loadSavedData loadSaved;
+	std::vector<std::pair<std::string, std::vector<float>>> loadedDataFromSave;
+
 
 	bool isDataLoaded = false;
 
@@ -104,6 +105,9 @@ private:
 	int UnlockedDifficultyLevel = 0;
 	float totalScore = 0.f;
 
+	int change = 0;
+	sf::Clock animateBackgroundClock;
+
 
 
 
@@ -134,7 +138,7 @@ public:
 
 
 	//public functions
-	void run();
+	int run();
 
 
 	void updatePollEvents(); 
@@ -164,7 +168,8 @@ public:
 
 	void gameProgress();
 	void initLoadedVariables();
-
+	void animateBackground();
+	void gameOver();
 
 
 };

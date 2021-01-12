@@ -19,18 +19,34 @@ void Game::initWindow()
 
 void Game::initTextures()
 {
-	this->textures["OBSTACLE"] = new sf::Texture();
-	this->textures["OBSTACLE"]->loadFromFile("textures/test2.png");
+	//this->textures["OBSTACLE"] = new sf::Texture();
+	//this->textures["OBSTACLE"]->loadFromFile("textures/test2.png");
+
+
+	for (int i = 0;i < 4;i++) { // number of obstacle textures in folder!!!!!!!!!!!!!
+
+		this->textures["OBSTACLE" + std::to_string(i)] = new sf::Texture();
+		this->textures["OBSTACLE" + std::to_string(i)]->loadFromFile("textures/obstacle" + std::to_string(i) + ".png");
+
+
+	}
+
+
 
 	this->textures["BACKGROUND"] = new sf::Texture();
 	this->textures["BACKGROUND"]->loadFromFile("textures/background.png");
 
 
-	for (int i = 0;i < 4;i++) { // number of tracks in folder!!!!!!!!!!!!!
+	for (int i = 0;i < 2;i++) { // number of tracks in folder!!!!!!!!!!!!!
+		for (int j=0; j< 4; j++) { // frame of animation for every single track
 
-		this->textures["TRACK" + std::to_string(i)] = new sf::Texture();
-		this->textures["TRACK" + std::to_string(i)]->loadFromFile("textures/track" + std::to_string(i) + ".png");
 
+			this->textures["TRACK" + std::to_string(i) + std::to_string(j)] = new sf::Texture();
+			this->textures["TRACK" + std::to_string(i) + std::to_string(j)]->loadFromFile("textures/track" + std::to_string(i) + std::to_string(j) + ".png");
+	
+		
+		}
+	
 
 	}
 
@@ -82,11 +98,12 @@ void Game::initClocks()
 	this->obstacleSpawnClock.restart();
 	this->movementSpeedClock.restart();
 	this->lifeClock.restart();
+	this->animateBackgroundClock.restart();
 }
 
 void Game::initBackground()
 {
-	this->background.setTexture(*this->textures["TRACK"  + std::to_string(this->selectedTrack)]);
+	this->background.setTexture(*this->textures["TRACK"  + std::to_string(this->selectedTrack) + std::to_string(0)]);
 }
 
 
@@ -107,9 +124,9 @@ void Game::initLifebar()
 
 
 //public functions 
-void Game::run()
+int Game::run()
 {
-while (this->window->isOpen()) {
+while (this->window->isOpen() && this->lifeCount != 0) {
 
 
 
@@ -126,6 +143,15 @@ while (this->window->isOpen()) {
 	this->render();
 }
 
+
+
+if (this->lifeCount == 0) {
+	return 1;
+}
+
+else {
+	return 0;
+}
 }
 
 void Game::updatePollEvents()
@@ -489,12 +515,13 @@ void Game::updateObstacles()
 
 
 				int trackNr = rand() % 3; // randomly picks one of three tracks
-
+				int randomObstacleTexture = rand() % 4; // randomly picks one of four different obstacle textures
+				 
 				int tracksXcoord[3] = { this->window->getSize().x / 6 * 1, this->window->getSize().x / 6 * 3, this->window->getSize().x / 6 * 5 };
 
-				positionX = tracksXcoord[trackNr] - this->textures["OBSTACLE"]->getSize().x / 2;
+				positionX = tracksXcoord[trackNr] - this->textures["OBSTACLE" + std::to_string(randomObstacleTexture)]->getSize().x / 2;
 
-				this->obstacles.push_back(new Obstacle(this->textures["OBSTACLE"], positionX, -50.0f, 0.f, 1.f, movementSpeed));
+				this->obstacles.push_back(new Obstacle(this->textures["OBSTACLE" + std::to_string(randomObstacleTexture)], positionX, -50.0f, 0.f, 1.f, movementSpeed));
 				//std::cout << "number of obstacles on the screen: " << obstacles.size() << std::endl;
 
 			}
@@ -503,6 +530,7 @@ void Game::updateObstacles()
 			if (this->diffLevel == 2 || this->diffLevel == 3) {
 				//brak zdefiniowanych torów
 				positionX = rand() % this->window->getSize().x;
+				int randomObstacleTexture = rand() % 4; // randomly picks one of four different obstacle textures
 
 
 				if (this->obstacles.size() != 0) { //dont apply this code if theres no obstacles on the screen
@@ -516,7 +544,7 @@ void Game::updateObstacles()
 				}
 
 
-				this->obstacles.push_back(new Obstacle(this->textures["OBSTACLE"], positionX, -50.0f, 0.f, 1.f, movementSpeed));
+				this->obstacles.push_back(new Obstacle(this->textures["OBSTACLE" + std::to_string(randomObstacleTexture)], positionX, -50.0f, 0.f, 1.f, movementSpeed));
 				//std::cout << "number of obstacles on the screen: " << obstacles.size() << std::endl;
 			}
 			
@@ -719,6 +747,16 @@ void Game::loadSavedGame()
 		std::cout << this->loadedDataFromSave[i].first << ":  " << this->loadedDataFromSave[i].second[0] << std::endl;
 	}
 
+
+	this->numberOfUnlockedCars = this->loadedDataFromSave[4].second[0];
+	this->numberOfUnlockedTracks = this->loadedDataFromSave[5].second[0];
+	this->UnlockedDifficultyLevel = this->loadedDataFromSave[6].second[0];
+	this->totalScore = this->loadedDataFromSave[0].second[0];
+
+
+
+
+
 	this->isDataLoaded = true;
 }
 
@@ -754,7 +792,12 @@ void Game::update()
 	
 	this->updatePollEvents();
 	this->updateInput();
+	this->animateBackground();
 	
+	if (this->lifeCount == 0) {
+
+		this->gameOver();
+	}
 	
 
 
@@ -771,7 +814,7 @@ void Game::update()
 
 
 	this->gameProgress();
-	
+
 }
 
 void Game::render()
@@ -919,6 +962,28 @@ void Game::initLoadedVariables()
 	std::cout << this->UnlockedDifficultyLevel << std::endl;
 	this->totalScore = this->loadedDataFromSave[0].second[0];
 	std::cout << this->totalScore << std::endl;
+}
+
+void Game::animateBackground()
+{
+	if (this->animateBackgroundClock.getElapsedTime().asSeconds() > 3) {
+
+		this->background.setTexture(*this->textures["TRACK" + std::to_string(this->selectedTrack) + std::to_string(this->change)]);
+		this->change++;
+
+		if (this->change == 3) {
+			this->change = 0;
+		}
+
+		this->animateBackgroundClock.restart();
+
+
+	}
+}
+
+void Game::gameOver()
+{
+	std::cout << "game over" << std::endl;
 }
 
 
