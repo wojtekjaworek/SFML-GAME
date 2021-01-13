@@ -40,6 +40,9 @@ SelectTrackMenu::SelectTrackMenu(sf::RenderWindow* window)
 
 SelectTrackMenu::~SelectTrackMenu()
 {
+	for (auto& i : this->textures) {
+		delete i.second;
+	}
 }
 
 void SelectTrackMenu::drawMenu(sf::RenderWindow* window)
@@ -56,9 +59,9 @@ void SelectTrackMenu::drawMenu(sf::RenderWindow* window)
 void SelectTrackMenu::initTextures()
 {
 
-	for (int i = 0;i < 2;i++) { // number of tracks in folder!!!!!!!!!!!!!
+	for (int i = 0;i < 1;i++) { // number of tracks in folder!!!!!!!!!!!!!
 		
-		for (int j = 0; j < 4; j++) { // animation
+		for (int j = 0; j < 30; j++) { // animation
 
 			this->textures["TRACK" + std::to_string(i) + std::to_string(j)] = new sf::Texture();
 			this->textures["TRACK" + std::to_string(i) + std::to_string(j)]->loadFromFile("textures/track" + std::to_string(i) + std::to_string(j) + ".png");

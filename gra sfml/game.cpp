@@ -37,8 +37,8 @@ void Game::initTextures()
 	this->textures["BACKGROUND"]->loadFromFile("textures/background.png");
 
 
-	for (int i = 0;i < 2;i++) { // number of tracks in folder!!!!!!!!!!!!!
-		for (int j=0; j< 4; j++) { // frame of animation for every single track
+	for (int i = 0;i < 1;i++) { // number of tracks in folder!!!!!!!!!!!!!
+		for (int j=0; j< 30; j++) { // frame of animation for every single track
 
 
 			this->textures["TRACK" + std::to_string(i) + std::to_string(j)] = new sf::Texture();
@@ -90,6 +90,11 @@ void Game::initSelectCarMenu()
 void Game::initSelectTrackMenu()
 {
 	this->selectTrackMenu = new SelectTrackMenu(this->window);
+}
+
+void Game::initHelp()
+{
+	this->help = new Help(this->window);
 }
 
 void Game::initClocks()
@@ -381,19 +386,22 @@ void Game::updatePollEvents()
 		
 
 
-		if (this->mainMenuFlag == true && this->mainMenu->selectedIndex == 5) { // informacje o grze i kodzie
+		if (this->mainMenuFlag == true && this->selectDifficultyLevelFlag == false && this->selectCarMenuFlag == false && this->selectTrackMenuFlag == false && this->mainMenu->selectedIndex == 5) { // informacje o grze i kodzie
 			switch (event.type) {
 			case sf::Event::KeyReleased:
 				if (event.key.code == sf::Keyboard::Enter) {
-					/*
+					this->helpFlag = true;
+				}
+			}
+		}
 
 
+		if (this->helpFlag == true) { // po nacisnieciu enter ekran help zamyka sie 
 
-					informacje o grze i kodzie
-
-
-
-					*/
+			switch (event.type) {
+			case sf::Event::KeyReleased:
+				if (event.key.code == sf::Keyboard::Escape) {
+					this->helpFlag = false;
 				}
 			}
 		}
@@ -521,30 +529,31 @@ void Game::updateObstacles()
 
 				positionX = tracksXcoord[trackNr] - this->textures["OBSTACLE" + std::to_string(randomObstacleTexture)]->getSize().x / 2;
 
-				this->obstacles.push_back(new Obstacle(this->textures["OBSTACLE" + std::to_string(randomObstacleTexture)], positionX, -50.0f, 0.f, 1.f, movementSpeed));
+				this->obstacles.push_back(new Obstacle(this->textures["OBSTACLE" + std::to_string(randomObstacleTexture)], positionX, -1.f * (this->textures["OBSTACLE" + std::to_string(randomObstacleTexture)]->getSize().y), 0.f, 1.f, movementSpeed));
 				//std::cout << "number of obstacles on the screen: " << obstacles.size() << std::endl;
-
 			}
 
 
 			if (this->diffLevel == 2 || this->diffLevel == 3) {
 				//brak zdefiniowanych torów
-				positionX = rand() % this->window->getSize().x;
+				
 				int randomObstacleTexture = rand() % 4; // randomly picks one of four different obstacle textures
+				positionX = rand() % static_cast<int>(this->window->getSize().x - this->textures["OBSTACLE" + std::to_string(randomObstacleTexture)]->getSize().x - 120.f) + 60.f;
 
-
+				
 				if (this->obstacles.size() != 0) { //dont apply this code if theres no obstacles on the screen
 
 
 					while (abs(positionX - this->obstacles.back()->getBounds().left) < (this->player->getBounds().width + 130 + this->obstacles.back()->getBounds().width)) { // space between obstacles cannot be so small that player doesnt have a chance to go through
 
-						positionX = rand() % this->window->getSize().x;
+						positionX = rand() % static_cast<int>(this->window->getSize().x - this->textures["OBSTACLE" + std::to_string(randomObstacleTexture)]->getSize().x - 120.f) + 60.f;
 					}
 
 				}
+				std::cout << "picked: " << positionX<< std::endl;
 
 
-				this->obstacles.push_back(new Obstacle(this->textures["OBSTACLE" + std::to_string(randomObstacleTexture)], positionX, -50.0f, 0.f, 1.f, movementSpeed));
+				this->obstacles.push_back(new Obstacle(this->textures["OBSTACLE" + std::to_string(randomObstacleTexture)], positionX, -1.f * (this->textures["OBSTACLE" + std::to_string(randomObstacleTexture)]->getSize().y), 0.f, 1.f, movementSpeed));
 				//std::cout << "number of obstacles on the screen: " << obstacles.size() << std::endl;
 			}
 			
@@ -591,7 +600,7 @@ void Game::updateObstaclesSpeed()
 
 
 	if (this->diffLevel == 3) {
-		this->movementSpeed = 10;
+		this->movementSpeed = 10 + 2 * ((movementSpeedLevel + 5) / 5) - sqrt((movementSpeedLevel + 5) / 5);
 		for (auto* obstacle : this->obstacles) {
 			obstacle->setMovementSpeed(movementSpeed);
 		}
@@ -674,6 +683,11 @@ void Game::showSelectTrackMenu(sf::RenderWindow* window)
 void Game::showLifebar(sf::RenderWindow* window, int lifeCount)
 {
 	this->lifebar->drawMenu(window, lifeCount);
+}
+
+void Game::showHelp(sf::RenderWindow* window)
+{
+	this->help->drawMenu(window);
 }
 
 
@@ -824,23 +838,28 @@ void Game::render()
 {
 	this->window->clear();
 
-	if (this->mainMenuFlag == true && this->selectDifficultyLevelFlag == false && this->selectCarMenuFlag == false && this->selectTrackMenuFlag == false) {
+	if (this->mainMenuFlag == true && this->selectDifficultyLevelFlag == false && this->selectCarMenuFlag == false && this->selectTrackMenuFlag == false && this->helpFlag == false) {
 		this->showMenu(window);
 	}
 
-	if (this->mainMenuFlag == true && this->selectDifficultyLevelFlag == true && this->selectCarMenuFlag == false && this->selectTrackMenuFlag == false) {
+	if (this->mainMenuFlag == true && this->selectDifficultyLevelFlag == true && this->selectCarMenuFlag == false && this->selectTrackMenuFlag == false && this->helpFlag == false) {
 		this->showSelectDifficultyLevelMenu(window);
 	}
 
-	if (this->mainMenuFlag == true && this->selectCarMenuFlag == true && this->selectDifficultyLevelFlag == false && this->selectTrackMenuFlag == false) {
+	if (this->mainMenuFlag == true && this->selectCarMenuFlag == true && this->selectDifficultyLevelFlag == false && this->selectTrackMenuFlag == false && this->helpFlag == false) {
 		this->showSelectCarMenu(window);
 	}
 
-	if (this->mainMenuFlag == true && this->selectTrackMenuFlag == true && this->selectDifficultyLevelFlag == false && this->selectCarMenuFlag == false) {
+	if (this->mainMenuFlag == true && this->selectTrackMenuFlag == true && this->selectDifficultyLevelFlag == false && this->selectCarMenuFlag == false && this->helpFlag == false) {
 		this->showSelectTrackMenu(window);
 	}
 
-	if (this->mainMenuFlag == false && this->pauseMenuFlag == true) {
+	if (this->mainMenuFlag == true && this->selectTrackMenuFlag == false && this->selectDifficultyLevelFlag == false && this->selectCarMenuFlag == false && this->helpFlag == true) {
+		this->showHelp(window);
+	}
+
+
+	if (this->mainMenuFlag == false && this->pauseMenuFlag == true && this->helpFlag == false) {
 		this->showPauseMenu(window);
 	}
 
@@ -969,14 +988,20 @@ void Game::initLoadedVariables()
 
 void Game::animateBackground()
 {
-	if (this->animateBackgroundClock.getElapsedTime().asSeconds() > 3) {
+	if (this->animateBackgroundClock.getElapsedTime().asSeconds() > 0.015) {
 
-		this->background.setTexture(*this->textures["TRACK" + std::to_string(this->selectedTrack) + std::to_string(this->change)]);
-		this->change++;
+		if (this->change < 30) {
+			this->background.setTexture(*this->textures["TRACK" + std::to_string(this->selectedTrack) + std::to_string(this->change)]);
+			this->change++;
 
-		if (this->change == 3) {
-			this->change = 0;
+			if (this->change == 30) {
+				this->change = 0;
+			}
 		}
+		
+		
+
+		
 
 		this->animateBackgroundClock.restart();
 
@@ -1013,6 +1038,7 @@ Game::Game()
 	this->initSelectDifficultyLevel();
 	this->initSelectCarMenu();
 	this->initSelectTrackMenu();
+	this->initHelp();
 	this->initBackground();
 	this->initCollisionDetection();
 	this->initLifebar();
@@ -1024,13 +1050,13 @@ Game::~Game()
 	delete this->window;
 	delete this->player;
 	
-	// for loop to delete all the loaded textures and prevent memory leaks 
 	for (auto& i : this->textures) {
 		delete i.second;
 	}
 
-	//delete all the obstacles
 	for (auto* i : this->obstacles) {
 		delete i;
 	}
+
+
 }

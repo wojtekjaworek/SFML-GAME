@@ -9,6 +9,7 @@
 #include "selectCarMenu.h"
 #include "selectTrackMenu.h"
 #include "lifebar.h"
+#include "help.h"
 #include <map>
 #include <vector>
 #include <fstream>
@@ -44,6 +45,9 @@ private:
 	SelectTrackMenu* selectTrackMenu;
 	bool selectTrackMenuFlag = false;
 	int selectedTrack = 0;
+
+	Help* help;
+	bool helpFlag = false;
 
 
 	 
@@ -122,6 +126,7 @@ private:
 	void initSelectDifficultyLevel();
 	void initSelectCarMenu();
 	void initSelectTrackMenu();
+	void initHelp();
 	void initClocks();
 	void initBackground();
 	void initCollisionDetection();
@@ -155,6 +160,7 @@ public:
 	void showSelectCarMenu(sf::RenderWindow* window);
 	void showSelectTrackMenu(sf::RenderWindow* window);
 	void showLifebar(sf::RenderWindow* window, int lifeCount);
+	void showHelp(sf::RenderWindow* window);
 	void saveGame();
 	void loadSavedGame();
 	void lookForCollision();

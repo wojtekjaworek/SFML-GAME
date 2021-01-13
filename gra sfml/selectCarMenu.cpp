@@ -38,6 +38,9 @@ SelectCarMenu::SelectCarMenu(sf::RenderWindow* window)
 
 SelectCarMenu::~SelectCarMenu()
 {
+	for (auto& i : this->textures) {
+		delete i.second;
+	}
 }
 
 void SelectCarMenu::drawMenu(sf::RenderWindow* window)

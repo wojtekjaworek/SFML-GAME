@@ -1,5 +1,6 @@
 #include "game.h"
 #include <iostream>
+#include <Windows.h>
 
 int main() {
 
@@ -10,11 +11,11 @@ int main() {
 
 	game = new Game();
 	newGame = game->run();
+	game->~Game();
 
 	if (newGame == 1) {
 		goto start;
 	}
 
-	
 	return 0;
 }
