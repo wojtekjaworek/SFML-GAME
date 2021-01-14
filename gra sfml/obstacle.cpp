@@ -14,6 +14,11 @@ const sf::Vector2f Obstacle::getPos()
 	return this->shape.getPosition();
 }
 
+const float Obstacle::getSpeed()
+{
+	return this->movementSpeed;
+}
+
 
 
 

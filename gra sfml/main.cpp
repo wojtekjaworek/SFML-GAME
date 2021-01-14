@@ -4,14 +4,15 @@
 
 int main() {
 
+	start:
+
 	Game* game;
 	int newGame = 0;
 
-	start:
-
 	game = new Game();
 	newGame = game->run();
-	game->~Game();
+	delete game;
+
 
 	if (newGame == 1) {
 		goto start;

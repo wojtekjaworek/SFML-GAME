@@ -1,2 +1,2 @@
-totalScore,lifeTime,movementTime,obstacleSpawnTime,numberOfUnlockedCars,numberOfUnlockedTracks,unlockedDifficultyLevel
-3.80766,1.2979,1.2979,1.2979,0,0,0
+totalScore,lifeTime,movementTime,obstacleSpawnTime,numberOfUnlockedCars,numberOfUnlockedTracks,unlockedDifficultyLevel,selectedCar,selectedTrack,diffLevel
+1.06001,1.06001,1.06001,1.06001,0,0,0,0,0,1

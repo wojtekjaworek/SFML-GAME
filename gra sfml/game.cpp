@@ -33,20 +33,14 @@ void Game::initTextures()
 
 
 
-	this->textures["BACKGROUND"] = new sf::Texture();
-	this->textures["BACKGROUND"]->loadFromFile("textures/background.png");
+	//this->textures["BACKGROUND"] = new sf::Texture();
+	//this->textures["BACKGROUND"]->loadFromFile("textures/track1.png");
 
 
-	for (int i = 0;i < 1;i++) { // number of tracks in folder!!!!!!!!!!!!!
-		for (int j=0; j< 30; j++) { // frame of animation for every single track
+	for (int i = 0;i < 2;i++) { // number of tracks in folder!!!!!!!!!!!!!
 
-
-			this->textures["TRACK" + std::to_string(i) + std::to_string(j)] = new sf::Texture();
-			this->textures["TRACK" + std::to_string(i) + std::to_string(j)]->loadFromFile("textures/track" + std::to_string(i) + std::to_string(j) + ".png");
-	
-		
-		}
-	
+		this->textures["TRACK" + std::to_string(i)] = new sf::Texture();
+		this->textures["TRACK" + std::to_string(i)]->loadFromFile("textures/track" + std::to_string(i) + ".png");
 
 	}
 
@@ -108,7 +102,10 @@ void Game::initClocks()
 
 void Game::initBackground()
 {
-	this->background.setTexture(*this->textures["TRACK"  + std::to_string(this->selectedTrack) + std::to_string(0)]);
+	this->background.setTexture(*this->textures["TRACK"  + std::to_string(this->selectedTrack)]);
+	//this->background.setTexture(*this->textures["BACKGROUND"]);
+
+	this->background.setPosition(sf::Vector2f(0.f, -300.f));
 }
 
 
@@ -116,6 +113,9 @@ void Game::initBackground()
 void Game::initCollisionDetection()
 {
 	this->collisionDetection = new Collision(this->player, this->obstacles);
+	this->collisionFor2Obstacles = new Collision(this->obstacles, this->obstacles);
+	this->indexes.x = 9999;
+	this->indexes.y = 9999;
 }
 
 void Game::initLifebar()
@@ -306,12 +306,14 @@ void Game::updatePollEvents()
 				if (this->selectTrackMenu->selectedIndex == 0) {
 					if (event.key.code == sf::Keyboard::Enter) {
 						this->selectedTrack = this->selectTrackMenu->next();
+						this->updateBackground();
 					}
 				}
 
 				if (this->selectTrackMenu->selectedIndex == 1) {
 					if (event.key.code == sf::Keyboard::Enter) {
 						this->selectedTrack = this->selectTrackMenu->previous();
+						this->updateBackground();
 
 					}
 				}
@@ -517,6 +519,8 @@ void Game::updateObstacles()
 			int positionX;
 			this->obstacleSpawnClock.restart();
 
+			int speedDifferencePercentage;
+			float speed;
 
 			if (this->diffLevel == 0 || this->diffLevel == 1) {
 				//trzy wyznaczone tory
@@ -529,7 +533,22 @@ void Game::updateObstacles()
 
 				positionX = tracksXcoord[trackNr] - this->textures["OBSTACLE" + std::to_string(randomObstacleTexture)]->getSize().x / 2;
 
-				this->obstacles.push_back(new Obstacle(this->textures["OBSTACLE" + std::to_string(randomObstacleTexture)], positionX, -1.f * (this->textures["OBSTACLE" + std::to_string(randomObstacleTexture)]->getSize().y), 0.f, 1.f, movementSpeed));
+				if (this->diffLevel == 0) {
+					this->movementSpeed = 3;
+					speed = this->movementSpeed;
+				}
+
+
+				if (this->diffLevel == 1) {
+					this->movementSpeed = 5;
+
+					speedDifferencePercentage = rand() % 90 + 10;
+					speed = this->movementSpeed + this->movementSpeed * speedDifferencePercentage / 100;
+				}
+
+
+
+				this->obstacles.push_back(new Obstacle(this->textures["OBSTACLE" + std::to_string(randomObstacleTexture)], positionX, -1.f * (this->textures["OBSTACLE" + std::to_string(randomObstacleTexture)]->getSize().y), 0.f, 1.f, speed));
 				//std::cout << "number of obstacles on the screen: " << obstacles.size() << std::endl;
 			}
 
@@ -539,6 +558,28 @@ void Game::updateObstacles()
 				
 				int randomObstacleTexture = rand() % 4; // randomly picks one of four different obstacle textures
 				positionX = rand() % static_cast<int>(this->window->getSize().x - this->textures["OBSTACLE" + std::to_string(randomObstacleTexture)]->getSize().x - 120.f) + 60.f;
+				float movementSpeedLevel = static_cast<float>(this->lifeTime.asSeconds()) + this->lifeTime_temp;
+
+
+
+				if (this->diffLevel == 2) {
+					this->movementSpeed = 5 + ((movementSpeedLevel + 5) / 5) - sqrt((movementSpeedLevel + 5) / 5);
+					speed = this->movementSpeed;
+				}
+
+
+
+				if (this->diffLevel == 3) {
+					this->movementSpeed = 7 + 2 * ((movementSpeedLevel + 5) / 5) - sqrt((movementSpeedLevel + 5) / 5);
+
+					speedDifferencePercentage = rand() % 40 + 10;
+					speed = this->movementSpeed + this->movementSpeed * speedDifferencePercentage / 100;
+				}
+
+				
+				
+
+
 
 				
 				if (this->obstacles.size() != 0) { //dont apply this code if theres no obstacles on the screen
@@ -550,10 +591,9 @@ void Game::updateObstacles()
 					}
 
 				}
-				std::cout << "picked: " << positionX<< std::endl;
 
 
-				this->obstacles.push_back(new Obstacle(this->textures["OBSTACLE" + std::to_string(randomObstacleTexture)], positionX, -1.f * (this->textures["OBSTACLE" + std::to_string(randomObstacleTexture)]->getSize().y), 0.f, 1.f, movementSpeed));
+				this->obstacles.push_back(new Obstacle(this->textures["OBSTACLE" + std::to_string(randomObstacleTexture)], positionX, -1.f * (this->textures["OBSTACLE" + std::to_string(randomObstacleTexture)]->getSize().y), 0.f, 1.f, speed));
 				//std::cout << "number of obstacles on the screen: " << obstacles.size() << std::endl;
 			}
 			
@@ -566,11 +606,11 @@ void Game::updateObstacles()
 void Game::updateObstaclesSpeed()
 {
 	float movementSpeedLevel = static_cast<float>(this->lifeTime.asSeconds()) + this->lifeTime_temp;
-
+	float tempXSpeed, tempYSpeed;
 
 
 	if (this->diffLevel == 0) {
-		this->movementSpeed = 1; // the easiest level, just to learn the game 
+		this->movementSpeed = 3; // the easiest level, just to learn the game 
 
 		for (auto* obstacle : this->obstacles) {
 			obstacle->setMovementSpeed(movementSpeed);
@@ -580,16 +620,25 @@ void Game::updateObstaclesSpeed()
 
 
 	if (this->diffLevel == 1) { 
-		this->movementSpeed = 2;
-		for (auto* obstacle : this->obstacles) {
-			obstacle->setMovementSpeed(movementSpeed);
+
+
+		if (this->indexes.x != 9999 || this->indexes.y != 9999) {
+			tempXSpeed = this->obstacles[this->indexes.x]->getSpeed();
+			tempYSpeed = this->obstacles[this->indexes.y]->getSpeed();
+			this->obstacles[this->indexes.x]->setMovementSpeed(4.f);
+			this->obstacles[this->indexes.y]->setMovementSpeed(3.f);
+			this->indexes.x = 9999;
+			this->indexes.y = 9999;
+
+
 		}
+
 
 	}
 
 
 	if (this->diffLevel == 2) {
-		this->movementSpeed = ((movementSpeedLevel + 5) / 5) - sqrt((movementSpeedLevel + 5) / 5);
+		this->movementSpeed = 4 + ((movementSpeedLevel + 5) / 5) - sqrt((movementSpeedLevel + 5) / 5);
 
 		for (auto* obstacle : this->obstacles) {
 			obstacle->setMovementSpeed(movementSpeed);
@@ -600,9 +649,16 @@ void Game::updateObstaclesSpeed()
 
 
 	if (this->diffLevel == 3) {
-		this->movementSpeed = 10 + 2 * ((movementSpeedLevel + 5) / 5) - sqrt((movementSpeedLevel + 5) / 5);
-		for (auto* obstacle : this->obstacles) {
-			obstacle->setMovementSpeed(movementSpeed);
+
+		if (this->indexes.x != 9999 || this->indexes.y != 9999) {
+
+			tempXSpeed = this->obstacles[this->indexes.x]->getSpeed();
+			tempYSpeed = this->obstacles[this->indexes.y]->getSpeed();
+			this->obstacles[this->indexes.x]->setMovementSpeed(4.f);
+			this->obstacles[this->indexes.y]->setMovementSpeed(3.f);
+			this->indexes.x = 9999;
+			this->indexes.y = 9999;
+
 		}
 
 	}
@@ -632,6 +688,7 @@ void Game::updateObstalesPosition()
 		i++;
 	}
 	this->collisionDetection->update(this->player, this->obstacles);
+	this->collisionFor2Obstacles->updateFor2Vectors(this->obstacles, this->obstacles);
 
 
 
@@ -645,6 +702,8 @@ void Game::updatePlayer()
 void Game::updateBackground()
 {
 	this->background.setTexture(*this->textures["TRACK" + std::to_string(this->selectedTrack)]);
+	std::cout << "selcted track: " << this->selectedTrack << std::endl;
+
 }
 
 
@@ -697,15 +756,21 @@ void Game::saveGame()
 
 	this->totalScore += this->lifeTime.asSeconds();
 	std::ofstream save;
-	save.open("save.csv"); // saving to csv, first line contain names, second line contain values
+	save.open("save.csv"); 
 	if (!save) {
 		perror("ERROR: nie mozna otworzyc pliku do zapisu!");
 	}
 
+	this->selectedCar;
+	this->selectedTrack;
+	this->diffLevel;
+
+
 	if (save) {
-		save << "totalScore,lifeTime,movementTime,obstacleSpawnTime,numberOfUnlockedCars,numberOfUnlockedTracks,unlockedDifficultyLevel" << std::endl;
+		save << "totalScore,lifeTime,movementTime,obstacleSpawnTime,numberOfUnlockedCars,numberOfUnlockedTracks,unlockedDifficultyLevel,selectedCar,selectedTrack,diffLevel" << std::endl;
 		save << this->totalScore <<","<< this->lifeTime.asSeconds() <<","<< this->movementSpeedTime.asSeconds() << "," << this->obstacleSpawnTime.asSeconds() <<","
-			 << this->numberOfUnlockedCars << "," << this->numberOfUnlockedTracks << "," << this->UnlockedDifficultyLevel << std::endl;
+			 << this->numberOfUnlockedCars << "," << this->numberOfUnlockedTracks << "," << this->UnlockedDifficultyLevel << "," << this->selectedCar << "," 
+			 << this->selectedTrack << "," << this->diffLevel <<  std::endl;
 		save.close();
 		std::cout << "Gra zapisana!" << std::endl;
 	}
@@ -747,7 +812,7 @@ void Game::loadSavedGame()
 
 				this->loadedDataFromSave.at(index).second.push_back(copy);
 
-				if (ss.peek() == ',') ss.ignore(); // skip when comma
+				if (ss.peek() == ',') ss.ignore(); 
 
 				index++;
 			}
@@ -769,6 +834,10 @@ void Game::loadSavedGame()
 		this->numberOfUnlockedTracks = this->loadedDataFromSave[5].second[0];
 		this->UnlockedDifficultyLevel = this->loadedDataFromSave[6].second[0];
 		this->totalScore = this->loadedDataFromSave[0].second[0];
+		this->selectedCar = this->loadedDataFromSave[7].second[0];
+		this->selectedTrack = this->loadedDataFromSave[8].second[0];
+		this->diffLevel= this->loadedDataFromSave[9].second[0];
+
 
 	}
 
@@ -783,6 +852,9 @@ void Game::lookForCollision()
 {
 	this->indexOfCollidingObstacle = this->collisionDetection->collidingIndex();
 	this->collisionBool = this->collisionDetection->collisionBool();
+
+	this->indexes = this->collisionFor2Obstacles->collidingIndexFor2Vectors();
+	
 
 	//std::cout << "index: " << this->indexOfCollidingObstacle << std::endl;
 	
@@ -806,6 +878,7 @@ void Game::processCollision()
 
 void Game::update()
 {
+
 	
 	this->updatePollEvents();
 	this->updateInput();
@@ -988,18 +1061,21 @@ void Game::initLoadedVariables()
 
 void Game::animateBackground()
 {
-	if (this->animateBackgroundClock.getElapsedTime().asSeconds() > 0.015) {
+	if (this->animateBackgroundClock.getElapsedTime().asSeconds() > 0.016) { // 1 sek / 60fps = 0.016 oko³o
 
-		if (this->change < 30) {
-			this->background.setTexture(*this->textures["TRACK" + std::to_string(this->selectedTrack) + std::to_string(this->change)]);
+
+
+		if (this->change < 60) { // 60fps
+
+			this->background.setPosition(sf::Vector2f(0.f, -300.f + 5.f * this->change));
 			this->change++;
-
-			if (this->change == 30) {
-				this->change = 0;
-			}
 		}
-		
-		
+
+		if (this->change == 60) { // 60 fps restart
+			this->change = 0;
+		}
+
+
 
 		
 

@@ -94,6 +94,10 @@ private:
 	bool collisionBool = false;
 
 
+	Collision* collisionFor2Obstacles;
+	sf::Vector2i indexes; 
+
+
 
 	Lifebar* lifebar;
 	bool lifebarFlag = false;

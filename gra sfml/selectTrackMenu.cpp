@@ -14,7 +14,7 @@ SelectTrackMenu::SelectTrackMenu(sf::RenderWindow* window)
 	this->selectedTrackIndex = 0;
 	this->initTextures();
 
-	this->trackImage.setTexture(*this->textures["TRACK" + std::to_string(this->selectedTrackIndex) + std::to_string(0)]);
+	this->trackImage.setTexture(*this->textures["TRACK" + std::to_string(this->selectedTrackIndex)]);
 	this->trackImage.setPosition(sf::Vector2f(window->getSize().x / 2, window->getSize().y / 8 * 2));
 	this->trackImage.setScale(0.2, 0.2);
 
@@ -59,17 +59,14 @@ void SelectTrackMenu::drawMenu(sf::RenderWindow* window)
 void SelectTrackMenu::initTextures()
 {
 
-	for (int i = 0;i < 1;i++) { // number of tracks in folder!!!!!!!!!!!!!
-		
-		for (int j = 0; j < 30; j++) { // animation
 
-			this->textures["TRACK" + std::to_string(i) + std::to_string(j)] = new sf::Texture();
-			this->textures["TRACK" + std::to_string(i) + std::to_string(j)]->loadFromFile("textures/track" + std::to_string(i) + std::to_string(j) + ".png");
+	for (int i = 0;i < 2;i++) { // number of tracks in folder!!!!!!!!!!!!!
 
-		}
-		
+		this->textures["TRACK" + std::to_string(i)] = new sf::Texture();
+		this->textures["TRACK" + std::to_string(i)]->loadFromFile("textures/track" + std::to_string(i) + ".png");
 
 	}
+
 }
 
 void SelectTrackMenu::selectUp()
@@ -103,7 +100,7 @@ int SelectTrackMenu::next()
 
 	if (this->selectedTrackIndex < 3) {
 		this->selectedTrackIndex += 1;
-		this->trackImage.setTexture(*this->textures["TRACK" + std::to_string(this->selectedTrackIndex) + std::to_string(0)]);
+		this->trackImage.setTexture(*this->textures["TRACK" + std::to_string(this->selectedTrackIndex)]);
 		std::cout << "index po: " << this->selectedTrackIndex << std::endl;
 	}
 	return this->selectedTrackIndex;
@@ -115,7 +112,7 @@ int SelectTrackMenu::previous()
 
 	if (this->selectedTrackIndex > 0) {
 		this->selectedTrackIndex -= 1;
-		this->trackImage.setTexture(*this->textures["TRACK" + std::to_string(this->selectedTrackIndex) + std::to_string(0)]);
+		this->trackImage.setTexture(*this->textures["TRACK" + std::to_string(this->selectedTrackIndex)]);
 		std::cout << "index po: " << this->selectedTrackIndex << std::endl;
 
 	}
