@@ -26,6 +26,9 @@ private:
 	std::map<std::string, sf::Texture* > textures; 
 	std::vector<Obstacle*> obstacles;
 
+	std::vector<Obstacle*> lights;
+	sf::Clock spawnLightsClock;
+
 
 	sf::Sprite background;
 
@@ -164,6 +167,7 @@ public:
 	void updateObstalesPosition();
 	void updatePlayer();
 	void updateBackground();
+	void updateLights();
 	void resetTime();
 	void showMenu(sf::RenderWindow* window);
 	void showPauseMenu(sf::RenderWindow* window);

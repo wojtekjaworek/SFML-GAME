@@ -41,7 +41,12 @@ void Game::initTextures()
 
 		this->textures["TRACK" + std::to_string(i)] = new sf::Texture();
 		this->textures["TRACK" + std::to_string(i)]->loadFromFile("textures/track" + std::to_string(i) + ".png");
+	}
 
+
+	for (int i = 0;i < 1;i++) {
+		this->textures["OTHER" + std::to_string(i)] = new sf::Texture();
+		this->textures["OTHER" + std::to_string(i)]->loadFromFile("textures/other" + std::to_string(i) + ".png");
 	}
 
 }
@@ -756,6 +761,37 @@ void Game::updateBackground()
 
 }
 
+void Game::updateLights()
+{
+
+	float posY[2] = { 20.f, 800.f - 20.f - this->textures["OTHER0"]->getSize().x };
+	int r = rand() % 2;
+
+	if (this->spawnLightsClock.getElapsedTime().asSeconds() > 4.f) {
+		this->lights.push_back(new Obstacle(this->textures["OTHER0"], posY[r], -1.f * (this->textures["OTHER0"]->getSize().y), 0.f, 1.f, 5.f));
+		this->spawnLightsClock.restart();
+	}
+
+	unsigned int i = 0;
+	for (auto* item : this->lights) {
+
+		item->update();
+
+
+
+
+		//delete obstacle when comes to the edge of the window
+		if (item->getBounds().top > this->window->getSize().y) {
+
+			delete item; //free memory
+			this->lights.erase(this->lights.begin() + i); // delete from vector tracking total number of obstacles
+			i--;
+		}
+
+		i++;
+	}
+}
+
 
 void Game::resetTime()
 {
@@ -950,6 +986,7 @@ void Game::update()
 		this->updateObstacles();
 		this->updateObstaclesSpeed();
 		this->updateObstalesPosition();
+		this->updateLights();
 		this->lookForCollision();
 		if (this->collisionBool == true) {
 			this->processCollision();
@@ -1011,6 +1048,10 @@ void Game::render()
 
 		for (auto* obstacle : this->obstacles) {
 			obstacle->render(this->window);
+		}
+
+		for (auto* item : this->lights) {
+			item->render(this->window);
 		}
 
 		this->showLifebar(this->window, this->lifeCount);
@@ -1092,15 +1133,15 @@ void Game::gameProgress() // unlocking new cars and tracks etc
 
 	if ((static_cast<int>(lifeTimeTemp)) == 30) {
 		if (this->numberOfUnlockedCars < 3) {
-			this->numberOfUnlockedCars = 3;
+			this->numberOfUnlockedCars = 3; // 3 is the index for fourth car
 		}
 	}
 
-	if (this->totalScore > 50) {
+	if (this->totalScore > 20) {
 		this->numberOfUnlockedTracks = 1;
 	}
 
-	if (this->totalScore > 75) {
+	if (this->totalScore > 40) {
 		this->numberOfUnlockedTracks = 2;
 	}
 

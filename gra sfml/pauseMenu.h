@@ -20,6 +20,6 @@ private:
 	
 	sf::Font menuFont;
 	sf::Text menuOptions[3]; // three different options in main menu: start game, select track, select car, informations
-
+	sf::FloatRect bounds[3];
 };
 
