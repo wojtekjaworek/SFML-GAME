@@ -26,5 +26,7 @@ private:
 	sf::Sprite trackImage;
 	sf::Font menuFont;
 	sf::Text menuOptions[3];
+	sf::FloatRect bounds[3];
+	sf::FloatRect imgBounds;
 
 };

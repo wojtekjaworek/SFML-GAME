@@ -16,6 +16,8 @@ private:
 
 	sf::Font menuFont;
 	sf::Text menuOptions[4];
+	
+
 
 };
 

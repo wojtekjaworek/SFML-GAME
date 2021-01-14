@@ -3,7 +3,7 @@
 Help::Help(sf::RenderWindow* window)
 {
 
-	if (!this->menuFont.loadFromFile("fonts/arial.ttf")) {
+	if (!this->menuFont.loadFromFile("fonts/Arial.TTF")) {
 		perror("ERROR: nie zaladowano fontu w pliku menu.cpp");
 	}
 

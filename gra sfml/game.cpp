@@ -37,7 +37,7 @@ void Game::initTextures()
 	//this->textures["BACKGROUND"]->loadFromFile("textures/track1.png");
 
 
-	for (int i = 0;i < 2;i++) { // number of tracks in folder!!!!!!!!!!!!!
+	for (int i = 0;i < 4;i++) { // number of tracks in folder!!!!!!!!!!!!!
 
 		this->textures["TRACK" + std::to_string(i)] = new sf::Texture();
 		this->textures["TRACK" + std::to_string(i)]->loadFromFile("textures/track" + std::to_string(i) + ".png");
@@ -47,9 +47,9 @@ void Game::initTextures()
 }
 
 
-void Game::initStuff()
+void Game::initFonts()
 {
-	this->lifeTimeCounter_font.loadFromFile("fonts/arial.ttf"); // set font for the time counter
+	this->lifeTimeCounter_font.loadFromFile("fonts/BTTF.ttf"); // set font for the time counter
 	this->lifeTimeCounter.setFont(lifeTimeCounter_font);
 }
 
@@ -123,6 +123,11 @@ void Game::initLifebar()
 	this->lifebar = new Lifebar(this->window);
 }
 
+void Game::initGameOver()
+{
+	this->gameOver = new GameOver(this->window);
+}
+
 
 
 
@@ -131,33 +136,48 @@ void Game::initLifebar()
 //public functions 
 int Game::run()
 {
-while (this->window->isOpen() && this->lifeCount != 0) {
+
+while (this->window->isOpen()) {
+
+	if (this->lifeCount != 0) {
+		if (this->mainMenuFlag == false && this->pauseMenuFlag == false && this->selectDifficultyLevelFlag == false) {
 
 
+			this->obstacleSpawnTime = this->obstacleSpawnClock.getElapsedTime();
+			this->lifeTime = this->lifeClock.getElapsedTime();
+			this->movementSpeedTime = this->movementSpeedClock.getElapsedTime();
+			this->lifeTimeCounter.setString(std::to_string(this->lifeTime_temp + this->lifeTime.asSeconds()));
 
-	if (this->mainMenuFlag == false && this->pauseMenuFlag == false && this->selectDifficultyLevelFlag == false) {
+		}
+	
+		this->update();
+		this->render();
+	}
 
-		
-		this->obstacleSpawnTime = this->obstacleSpawnClock.getElapsedTime();
-		this->lifeTime = this->lifeClock.getElapsedTime();
-		this->movementSpeedTime = this->movementSpeedClock.getElapsedTime();
-		this->lifeTimeCounter.setString(std::to_string(this->lifeTime_temp + this->lifeTime.asSeconds()));
+	
+
+	if (this->lifeCount == 0) {
+
+		this->gameOverFlag = true;
+		this->render();
+		this->updatePollEvents();
 
 	}
-	this->update();
-	this->render();
+	if (this->endWithCodeZero == true) {
+		return 0;
+	}
+
+	if (this->endWtihCodeOne == true) {
+		return 1;
+	}
+	
+}
+
+return 0;
+
 }
 
 
-
-if (this->lifeCount == 0) {
-	return 1;
-}
-
-else {
-	return 0;
-}
-}
 
 void Game::updatePollEvents()
 {
@@ -166,6 +186,18 @@ void Game::updatePollEvents()
 
 		if (event.Event::type == sf::Event::Closed) { //close window
 			this->window->close();
+			this->endWithCodeZero = true;
+		}
+
+		if (this->gameOverFlag == true) {
+			switch (event.type) {
+			case sf::Event::KeyReleased:
+				if (event.key.code == sf::Keyboard::Enter) {
+					this->endWtihCodeOne = true;
+
+
+				}
+			}
 		}
 
 
@@ -398,15 +430,7 @@ void Game::updatePollEvents()
 		}
 
 
-		if (this->helpFlag == true) { // po nacisnieciu enter ekran help zamyka sie 
-
-			switch (event.type) {
-			case sf::Event::KeyReleased:
-				if (event.key.code == sf::Keyboard::Escape) {
-					this->helpFlag = false;
-				}
-			}
-		}
+		
 
 
 
@@ -416,7 +440,7 @@ void Game::updatePollEvents()
 
 
 
-		if (this->mainMenuFlag == false && this->pauseMenuFlag == false) { // turn on/off pause menu
+		if (this->mainMenuFlag == false && this->pauseMenuFlag == false) { // turn on/off pause menu and help menu
 			switch (event.type) {
 			case sf::Event::KeyReleased:
 				if (event.key.code == sf::Keyboard::Escape) {
@@ -427,8 +451,34 @@ void Game::updatePollEvents()
 
 
 					}
+				}
+
+				if (event.key.code == sf::Keyboard::F1) {
+					std::cout << "help menu" << std::endl;
+					this->helpFlag = true;
+					if (this->helpFlag == true) {
+						this->pauseGame();
+						std::cout << "game paused " << std::endl;
+					}
+
+				}
 
 
+
+
+			}
+		}
+
+
+
+		if (this->helpFlag == true) { // po nacisnieciu enter ekran help zamyka sie 
+
+			switch (event.type) {
+			case sf::Event::KeyReleased:
+				if (event.key.code == sf::Keyboard::Escape) {
+					this->pauseMenuFlag = false;
+					this->helpFlag = false;
+					this->resumeGame();
 				}
 			}
 		}
@@ -481,6 +531,9 @@ void Game::updatePollEvents()
 			}
 		}
 
+		
+
+		
 
 
 	}
@@ -514,10 +567,9 @@ void Game::updateInput()
 void Game::updateObstacles()
 {
 		
-		if (this->obstacleSpawnTime.asSeconds() > (static_cast<float>(4 / this->movementSpeed))) { 
+		if (this->obstacleSpawnTime.asSeconds() > (static_cast<float>(3 / this->movementSpeed))) { 
 
 			int positionX;
-			this->obstacleSpawnClock.restart();
 
 			int speedDifferencePercentage;
 			float speed;
@@ -544,6 +596,7 @@ void Game::updateObstacles()
 
 					speedDifferencePercentage = rand() % 90 + 10;
 					speed = this->movementSpeed + this->movementSpeed * speedDifferencePercentage / 100;
+
 				}
 
 
@@ -597,6 +650,7 @@ void Game::updateObstacles()
 				//std::cout << "number of obstacles on the screen: " << obstacles.size() << std::endl;
 			}
 			
+			this->obstacleSpawnClock.restart();
 
 		}
 
@@ -612,9 +666,6 @@ void Game::updateObstaclesSpeed()
 	if (this->diffLevel == 0) {
 		this->movementSpeed = 3; // the easiest level, just to learn the game 
 
-		for (auto* obstacle : this->obstacles) {
-			obstacle->setMovementSpeed(movementSpeed);
-		}
 
 	}
 
@@ -625,11 +676,10 @@ void Game::updateObstaclesSpeed()
 		if (this->indexes.x != 9999 || this->indexes.y != 9999) {
 			tempXSpeed = this->obstacles[this->indexes.x]->getSpeed();
 			tempYSpeed = this->obstacles[this->indexes.y]->getSpeed();
-			this->obstacles[this->indexes.x]->setMovementSpeed(4.f);
-			this->obstacles[this->indexes.y]->setMovementSpeed(3.f);
+			this->obstacles[this->indexes.x]->setMovementSpeed(6.f);
+			this->obstacles[this->indexes.y]->setMovementSpeed(5.f);
 			this->indexes.x = 9999;
 			this->indexes.y = 9999;
-
 
 		}
 
@@ -638,11 +688,11 @@ void Game::updateObstaclesSpeed()
 
 
 	if (this->diffLevel == 2) {
-		this->movementSpeed = 4 + ((movementSpeedLevel + 5) / 5) - sqrt((movementSpeedLevel + 5) / 5);
+		this->movementSpeed = 5 + ((movementSpeedLevel + 5) / 5) - sqrt((movementSpeedLevel + 5) / 5);
 
-		for (auto* obstacle : this->obstacles) {
-			obstacle->setMovementSpeed(movementSpeed);
-		}
+		//for (auto* obstacle : this->obstacles) {
+		//	obstacle->setMovementSpeed(movementSpeed);
+		//}
 
 
 	}
@@ -654,8 +704,8 @@ void Game::updateObstaclesSpeed()
 
 			tempXSpeed = this->obstacles[this->indexes.x]->getSpeed();
 			tempYSpeed = this->obstacles[this->indexes.y]->getSpeed();
-			this->obstacles[this->indexes.x]->setMovementSpeed(4.f);
-			this->obstacles[this->indexes.y]->setMovementSpeed(3.f);
+			this->obstacles[this->indexes.x]->setMovementSpeed(10.f);
+			this->obstacles[this->indexes.y]->setMovementSpeed(9.f);
 			this->indexes.x = 9999;
 			this->indexes.y = 9999;
 
@@ -747,6 +797,11 @@ void Game::showLifebar(sf::RenderWindow* window, int lifeCount)
 void Game::showHelp(sf::RenderWindow* window)
 {
 	this->help->drawMenu(window);
+}
+
+void Game::showGameOver(sf::RenderWindow* window, float lifeTime_temp, sf::Time lifeTime)
+{
+	this->gameOver->drawMenu(window, lifeTime_temp, lifeTime);
 }
 
 
@@ -878,20 +933,20 @@ void Game::processCollision()
 
 void Game::update()
 {
-
 	
+
 	this->updatePollEvents();
 	this->updateInput();
 	this->animateBackground();
 	
 	if (this->lifeCount == 0) {
 
-		this->gameOver();
+		this->gameOverFunc();
 	}
 	
 
 
-	if (this->pauseMenuFlag == false && this->mainMenuFlag == false) {
+	if (this->pauseMenuFlag == false && this->mainMenuFlag == false && this->helpFlag == false) {
 		this->updateObstacles();
 		this->updateObstaclesSpeed();
 		this->updateObstalesPosition();
@@ -911,45 +966,54 @@ void Game::render()
 {
 	this->window->clear();
 
-	if (this->mainMenuFlag == true && this->selectDifficultyLevelFlag == false && this->selectCarMenuFlag == false && this->selectTrackMenuFlag == false && this->helpFlag == false) {
-		this->showMenu(window);
+	if (this->mainMenuFlag == true && this->selectDifficultyLevelFlag == false && this->selectCarMenuFlag == false && this->selectTrackMenuFlag == false && this->helpFlag == false && this->gameOverFlag == false) {
+		this->showMenu(this->window);
 	}
 
-	if (this->mainMenuFlag == true && this->selectDifficultyLevelFlag == true && this->selectCarMenuFlag == false && this->selectTrackMenuFlag == false && this->helpFlag == false) {
-		this->showSelectDifficultyLevelMenu(window);
+	if (this->mainMenuFlag == true && this->selectDifficultyLevelFlag == true && this->selectCarMenuFlag == false && this->selectTrackMenuFlag == false && this->helpFlag == false && this->gameOverFlag == false) {
+		this->showSelectDifficultyLevelMenu(this->window);
 	}
 
-	if (this->mainMenuFlag == true && this->selectCarMenuFlag == true && this->selectDifficultyLevelFlag == false && this->selectTrackMenuFlag == false && this->helpFlag == false) {
-		this->showSelectCarMenu(window);
+	if (this->mainMenuFlag == true && this->selectCarMenuFlag == true && this->selectDifficultyLevelFlag == false && this->selectTrackMenuFlag == false && this->helpFlag == false && this->gameOverFlag == false) {
+		this->showSelectCarMenu(this->window);
 	}
 
-	if (this->mainMenuFlag == true && this->selectTrackMenuFlag == true && this->selectDifficultyLevelFlag == false && this->selectCarMenuFlag == false && this->helpFlag == false) {
-		this->showSelectTrackMenu(window);
+	if (this->mainMenuFlag == true && this->selectTrackMenuFlag == true && this->selectDifficultyLevelFlag == false && this->selectCarMenuFlag == false && this->helpFlag == false && this->gameOverFlag == false) {
+		this->showSelectTrackMenu(this->window);
 	}
 
-	if (this->mainMenuFlag == true && this->selectTrackMenuFlag == false && this->selectDifficultyLevelFlag == false && this->selectCarMenuFlag == false && this->helpFlag == true) {
-		this->showHelp(window);
+	if (this->mainMenuFlag == true && this->selectTrackMenuFlag == false && this->selectDifficultyLevelFlag == false && this->selectCarMenuFlag == false && this->helpFlag == true && this->gameOverFlag == false) {
+		this->showHelp(this->window);
+	}
+	else if (this->mainMenuFlag == false && this->pauseMenuFlag == false && this->helpFlag == true && this->gameOverFlag == false) {
+		this->showHelp(this->window);
 	}
 
 
-	if (this->mainMenuFlag == false && this->pauseMenuFlag == true && this->helpFlag == false) {
-		this->showPauseMenu(window);
+	if (this->mainMenuFlag == false && this->pauseMenuFlag == true && this->helpFlag == false && this->gameOverFlag == false) {
+		this->showPauseMenu(this->window);
+	}
+
+	if (this->gameOverFlag == true) {
+		this->showGameOver(this->window, this->lifeTime_temp, this->lifeTime);
+
 	}
 
 
 	
-	if (this->mainMenuFlag == false && this->pauseMenuFlag == false) {
+	if (this->mainMenuFlag == false && this->pauseMenuFlag == false && this->helpFlag == false && this->gameOverFlag == false) {
 
 		//draw game here
 		this->window->draw(this->background);
 
-		this->showLifebar(this->window, this->lifeCount);
 
 		this->player->render(*this->window); 
 
 		for (auto* obstacle : this->obstacles) {
 			obstacle->render(this->window);
 		}
+
+		this->showLifebar(this->window, this->lifeCount);
 
 
 		//draw lifetime counter in the right top corner
@@ -1061,9 +1125,9 @@ void Game::initLoadedVariables()
 
 void Game::animateBackground()
 {
-	if (this->animateBackgroundClock.getElapsedTime().asSeconds() > 0.016) { // 1 sek / 60fps = 0.016 oko³o
 
 
+	if (this->animateBackgroundClock.getElapsedTime().asSeconds() > 0.016) { // 1 sek / 60fps = 0.016 oko³o //// 0.08 = 120 fps	
 
 		if (this->change < 60) { // 60fps
 
@@ -1075,17 +1139,14 @@ void Game::animateBackground()
 			this->change = 0;
 		}
 
-
-
-		
-
 		this->animateBackgroundClock.restart();
-
-
 	}
+
+
+
 }
 
-void Game::gameOver()
+void Game::gameOverFunc()
 {
 	std::cout << "game over" << std::endl;
 }
@@ -1106,7 +1167,7 @@ Game::Game()
 
 	this->initWindow();
 	this->initTextures();
-	this->initStuff();
+	this->initFonts();
 	this->initClocks();
 	this->initPlayer(this->window);
 	this->initMainMenu();
@@ -1118,6 +1179,7 @@ Game::Game()
 	this->initBackground();
 	this->initCollisionDetection();
 	this->initLifebar();
+	this->initGameOver();
 	
 }
 

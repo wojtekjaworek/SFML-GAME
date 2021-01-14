@@ -25,8 +25,8 @@ private:
 
 	sf::Font menuFont;
 	sf::Text menuOptions[2]; 
-	std::string diffLeveltoPick[4] = { "< (1/4) latwy >", "< (2/4) sredni >", "< (3/4) trudny >", "< (4/4) eksremalny >" };
-
+	sf::String diffLeveltoPick[4] = { L"< (1/4) £ATWY >", L"< (2/4) ŒREDNI >", L"< (3/4) TRUDY >", L"< (4/4) EKSTREMALNY >" };
+	sf::FloatRect bounds[2];
 
 };
 

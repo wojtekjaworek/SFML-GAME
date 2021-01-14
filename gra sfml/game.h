@@ -10,6 +10,7 @@
 #include "selectTrackMenu.h"
 #include "lifebar.h"
 #include "help.h"
+#include "gameOver.h"
 #include <map>
 #include <vector>
 #include <fstream>
@@ -102,7 +103,12 @@ private:
 	Lifebar* lifebar;
 	bool lifebarFlag = false;
 	int lifeCount = 5;
+	
+	GameOver* gameOver;
+	bool gameOverFlag = false;
 
+	bool endWtihCodeOne = false;
+	bool endWithCodeZero = false;
 
 
 
@@ -123,7 +129,7 @@ private:
 	//private functions
 	void initWindow();
 	void initTextures();
-	void initStuff(); // initialize other stuff like fonts etc.
+	void initFonts(); // initialize other stuff like fonts etc.
 	void initPlayer(sf::RenderWindow *window); // textureIndex is the same as selectedCar
 	void initMainMenu();
 	void initPauseMenu();
@@ -135,6 +141,7 @@ private:
 	void initBackground();
 	void initCollisionDetection();
 	void initLifebar();
+	void initGameOver();
 
 
 
@@ -149,7 +156,7 @@ public:
 	//public functions
 	int run();
 
-
+	
 	void updatePollEvents(); 
 	void updateInput(); 
 	void updateObstacles();
@@ -165,6 +172,7 @@ public:
 	void showSelectTrackMenu(sf::RenderWindow* window);
 	void showLifebar(sf::RenderWindow* window, int lifeCount);
 	void showHelp(sf::RenderWindow* window);
+	void showGameOver(sf::RenderWindow* window, float lifeTime_temp, sf::Time lifeTime);
 	void saveGame();
 	void loadSavedGame();
 	void lookForCollision();
@@ -179,7 +187,7 @@ public:
 	void gameProgress();
 	void initLoadedVariables();
 	void animateBackground();
-	void gameOver();
+	void gameOverFunc();
 
 
 };

@@ -143,6 +143,7 @@
   <ItemGroup>
     <ClCompile Include="collision.cpp" />
     <ClCompile Include="game.cpp" />
+    <ClCompile Include="gameOver.cpp" />
     <ClCompile Include="help.cpp" />
     <ClCompile Include="lifebar.cpp" />
     <ClCompile Include="main.cpp" />
@@ -157,6 +158,7 @@
   <ItemGroup>
     <ClInclude Include="collision.h" />
     <ClInclude Include="game.h" />
+    <ClInclude Include="gameOver.h" />
     <ClInclude Include="help.h" />
     <ClInclude Include="lifebar.h" />
     <ClInclude Include="menu.h" />
