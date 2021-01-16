@@ -32,6 +32,8 @@ private:
 
 	sf::Sprite background;
 
+	std::vector<sf::Sprite*> explosions;
+
 	Menu* mainMenu;
 	bool mainMenuFlag = true;
 
@@ -124,6 +126,8 @@ private:
 
 	int change = 0;
 	sf::Clock animateBackgroundClock;
+
+	sf::Clock deleteObstacleClock;
 
 
 

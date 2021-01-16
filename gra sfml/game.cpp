@@ -35,6 +35,8 @@ void Game::initTextures()
 
 	//this->textures["BACKGROUND"] = new sf::Texture();
 	//this->textures["BACKGROUND"]->loadFromFile("textures/track1.png");
+	this->textures["EXPLOSION"] = new sf::Texture();
+	this->textures["EXPLOSION"]->loadFromFile("textures/EXPLOSION.png");
 
 
 	for (int i = 0;i < 4;i++) { // number of tracks in folder!!!!!!!!!!!!!
@@ -173,6 +175,7 @@ while (this->window->isOpen()) {
 	}
 
 	if (this->endWtihCodeOne == true) {
+		this->saveGame();
 		return 1;
 	}
 	
@@ -546,22 +549,21 @@ void Game::updatePollEvents()
 
 void Game::updateInput()
 
-//TODO: uzale¿niæ prêdkoœci zmiany po³o¿enia (argumenty move) od prêdkoœci z jak¹ przeszkody poruszaj¹ siê,
 {
 
 
-	if (this->mainMenuFlag == false && this->pauseMenuFlag == false && this->selectDifficultyLevelFlag == false) {
-		//move player
+	if (this->mainMenuFlag == false && this->pauseMenuFlag == false && this->helpFlag == false) {
+
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && this->player->getPos().y >= 5.f) {
 			this->player->move(0.f, -0.5f);
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && this->player->getPos().y < this->window->getSize().y - this->player->getBounds().height) {
 			this->player->move(0.f, 0.5f);
 		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && this->player->getPos().x < this->window->getSize().x - this->player->getBounds().width) {
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && this->player->getPos().x < this->window->getSize().x - 80.f - this->player->getBounds().width) {
 			this->player->move(1.f, 0.f);
 		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && this->player->getPos().x >= 5.f) {
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && this->player->getPos().x >= 85.f) {
 			this->player->move(-1.f, 0.f);
 		}
 	}
@@ -571,8 +573,24 @@ void Game::updateInput()
 
 void Game::updateObstacles()
 {
+	int a;
+	if (this->diffLevel == 0) {
+		a = 4;
+	}
+	if (this->diffLevel == 1) {
+		a = 3;
+	}
+	if (this->diffLevel == 2) {
+		a = 3;
+	}
+	if (this->diffLevel == 3) {
+		a = 4;
+	}
+
+
+
 		
-		if (this->obstacleSpawnTime.asSeconds() > (static_cast<float>(3 / this->movementSpeed))) { 
+		if (this->obstacleSpawnTime.asSeconds() > (static_cast<float>(4 / this->movementSpeed))) { 
 
 			int positionX;
 
@@ -597,7 +615,7 @@ void Game::updateObstacles()
 
 
 				if (this->diffLevel == 1) {
-					this->movementSpeed = 5;
+					this->movementSpeed = 3;
 
 					speedDifferencePercentage = rand() % 90 + 10;
 					speed = this->movementSpeed + this->movementSpeed * speedDifferencePercentage / 100;
@@ -615,7 +633,7 @@ void Game::updateObstacles()
 				//brak zdefiniowanych torów
 				
 				int randomObstacleTexture = rand() % 4; // randomly picks one of four different obstacle textures
-				positionX = rand() % static_cast<int>(this->window->getSize().x - this->textures["OBSTACLE" + std::to_string(randomObstacleTexture)]->getSize().x - 120.f) + 60.f;
+				positionX = rand() % static_cast<int>(this->window->getSize().x - this->textures["OBSTACLE" + std::to_string(randomObstacleTexture)]->getSize().x - 160.f) + 80.f;
 				float movementSpeedLevel = static_cast<float>(this->lifeTime.asSeconds()) + this->lifeTime_temp;
 
 
@@ -645,7 +663,7 @@ void Game::updateObstacles()
 
 					while (abs(positionX - this->obstacles.back()->getBounds().left) < (this->player->getBounds().width + 130 + this->obstacles.back()->getBounds().width)) { // space between obstacles cannot be so small that player doesnt have a chance to go through
 
-						positionX = rand() % static_cast<int>(this->window->getSize().x - this->textures["OBSTACLE" + std::to_string(randomObstacleTexture)]->getSize().x - 120.f) + 60.f;
+						positionX = rand() % static_cast<int>(this->window->getSize().x - this->textures["OBSTACLE" + std::to_string(randomObstacleTexture)]->getSize().x - 160.f) + 80.f;
 					}
 
 				}
@@ -959,6 +977,9 @@ void Game::processCollision()
 	this->lifeCount--;
 
 	if (this->indexOfCollidingObstacle != 9999) {
+		//this->deleteObstacleClock.restart();
+		//this->explosions.push_back(new sf::Sprite(*this->textures["EXPLOSION"]));
+		//this->explosions.back()->setPosition(this->obstacles[this->indexOfCollidingObstacle]->getPos().x, this->obstacles[this->indexOfCollidingObstacle]->getPos().y);
 		delete this->obstacles[this->indexOfCollidingObstacle];
 		this->obstacles.erase(this->obstacles.begin() + this->indexOfCollidingObstacle);
 		this->indexOfCollidingObstacle = 9999;
@@ -973,12 +994,19 @@ void Game::update()
 
 	this->updatePollEvents();
 	this->updateInput();
-	this->animateBackground();
-	
+	if (this->diffLevel > 1) {
+		for (int i = 0; i < this->diffLevel - 1; i++) {
+			this->animateBackground();
+		}
+	}
+	else {
+		this->animateBackground();
+	}
 	if (this->lifeCount == 0) {
 
 		this->gameOverFunc();
 	}
+	
 	
 
 
@@ -991,6 +1019,7 @@ void Game::update()
 		if (this->collisionBool == true) {
 			this->processCollision();
 		}
+
 
 	}
 
@@ -1053,6 +1082,7 @@ void Game::render()
 		for (auto* item : this->lights) {
 			item->render(this->window);
 		}
+
 
 		this->showLifebar(this->window, this->lifeCount);
 
@@ -1168,24 +1198,21 @@ void Game::animateBackground()
 {
 
 
-	if (this->animateBackgroundClock.getElapsedTime().asSeconds() > 0.016) { // 1 sek / 60fps = 0.016 oko³o //// 0.08 = 120 fps	
+	
 
-		if (this->change < 60) { // 60fps
+	if (this->change < 60) { // 60fps
 
-			this->background.setPosition(sf::Vector2f(0.f, -300.f + 5.f * this->change));
-			this->change++;
-		}
-
-		if (this->change == 60) { // 60 fps restart
-			this->change = 0;
-		}
-
-		this->animateBackgroundClock.restart();
+		this->background.setPosition(sf::Vector2f(0.f, -300.f + 5.f * this->change));
+		this->change++;
 	}
 
+	if (this->change == 60) { // 60 fps restart
+		this->change = 0;
+	}
 
-
+	this->animateBackgroundClock.restart();
 }
+
 
 void Game::gameOverFunc()
 {

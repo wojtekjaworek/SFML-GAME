@@ -44,6 +44,11 @@ void Obstacle::render(sf::RenderTarget* target)
 	target->draw(this->shape);
 }
 
+void Obstacle::setNewTexture(sf::Texture* texture, bool resetRect)
+{
+	this->shape.setTexture(*texture, resetRect);
+}
+
 float Obstacle::setMovementSpeed(float speed)
 {
 

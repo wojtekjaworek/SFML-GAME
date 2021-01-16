@@ -24,9 +24,11 @@ public:
 	const sf::FloatRect getBounds();
 	const sf::Vector2f getPos();
 	const float getSpeed();
+	
 	//functions
 	void update();
 	void render(sf::RenderTarget* target);
+	void setNewTexture(sf::Texture* texture, bool resetRect);
 	float setMovementSpeed(float speed);
 
 };
