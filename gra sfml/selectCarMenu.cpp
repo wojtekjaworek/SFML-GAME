@@ -4,6 +4,7 @@
 
 SelectCarMenu::SelectCarMenu(sf::RenderWindow* window)
 {
+
 	if (!this->menuFont.loadFromFile("fonts/Oxanium-ExtraBold.TTF")) {
 		perror("ERROR: nie zaladowano fontu w pliku menu.cpp");
 	}
@@ -100,24 +101,25 @@ void SelectCarMenu::selectDown()
 
 int SelectCarMenu::next()
 {
-	std::cout << "index przed: " << this->selectedCarIndex << std::endl;
 
 	if (this->selectedCarIndex < 3) {
 		this->selectedCarIndex += 1;
 		this->carImage.setTexture(*this->textures["PLAYER" + std::to_string(this->selectedCarIndex)]);
-		std::cout << "index po: " << this->selectedCarIndex << std::endl;
+		this->imgBounds = carImage.getLocalBounds();
+		this->carImage.setOrigin(imgBounds.left + imgBounds.width / 2.0f, 0.f);
 	}
+
 	return this->selectedCarIndex;
 }
 
 int SelectCarMenu::previous()
 {
-	std::cout << "index przed: " << this->selectedCarIndex << std::endl;
 
 	if (this->selectedCarIndex > 0) {
 		this->selectedCarIndex -= 1;
 		this->carImage.setTexture(*this->textures["PLAYER" + std::to_string(this->selectedCarIndex)]);
-		std::cout << "index po: " << this->selectedCarIndex << std::endl;
+		this->imgBounds = carImage.getLocalBounds();
+		this->carImage.setOrigin(imgBounds.left + imgBounds.width / 2.0f, 0.f);
 
 	}
 	return this->selectedCarIndex;

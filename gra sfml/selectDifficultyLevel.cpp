@@ -4,6 +4,7 @@
 
 SelectDifficultyLevel::SelectDifficultyLevel(sf::RenderWindow* window)
 {
+
 	if (!this->menuFont.loadFromFile("fonts/Oxanium-ExtraBold.TTF")) {
 		perror("ERROR: nie zaladowano fontu w pliku menu.cpp");
 	}

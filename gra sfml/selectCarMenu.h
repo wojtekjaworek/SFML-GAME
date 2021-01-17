@@ -24,6 +24,7 @@ public:
 
 private:
 
+
 	sf::Sprite carImage;
 	sf::Font menuFont;
 	sf::Text menuOptions[3];

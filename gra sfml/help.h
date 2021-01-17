@@ -15,7 +15,8 @@ public:
 private:
 
 	sf::Font menuFont;
-	sf::Text menuOptions[4];
+	sf::Text menuOptions[5];
+	sf::FloatRect bounds[5];
 	
 
 

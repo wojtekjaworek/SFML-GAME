@@ -15,6 +15,13 @@
 #include <vector>
 #include <fstream>
 
+
+
+
+
+
+
+
 class Game {
 
 private:
@@ -76,9 +83,16 @@ private:
 
 
 	struct loadSavedData {
-		int score;
-		int UnlockedCarID;
-		int unlockedTrackID;
+		float totalScore;
+		float lifeTime;
+		float movementTime;
+		float obstacleSpawnTime;
+		int numberOfUnlockedCars;
+		int numberOfUnlockedTracks;
+		int unlockedDifficultyLevel;
+		int selectedCar;
+		int selectedTrack;
+		int diffLevel;
 	};
 
 	loadSavedData loadSaved;

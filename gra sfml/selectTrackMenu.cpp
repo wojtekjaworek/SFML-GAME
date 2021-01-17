@@ -104,24 +104,20 @@ void SelectTrackMenu::selectDown()
 
 int SelectTrackMenu::next()
 {
-	std::cout << "index przed: " << this->selectedTrackIndex << std::endl;
 
 	if (this->selectedTrackIndex < 3) {
 		this->selectedTrackIndex += 1;
 		this->trackImage.setTexture(*this->textures["TRACK" + std::to_string(this->selectedTrackIndex)]);
-		std::cout << "index po: " << this->selectedTrackIndex << std::endl;
 	}
 	return this->selectedTrackIndex;
 }
 
 int SelectTrackMenu::previous()
 {
-	std::cout << "index przed: " << this->selectedTrackIndex << std::endl;
 
 	if (this->selectedTrackIndex > 0) {
 		this->selectedTrackIndex -= 1;
 		this->trackImage.setTexture(*this->textures["TRACK" + std::to_string(this->selectedTrackIndex)]);
-		std::cout << "index po: " << this->selectedTrackIndex << std::endl;
 
 	}
 	return this->selectedTrackIndex;
