@@ -5,11 +5,11 @@ class SelectTrackMenu
 {
 
 public:
-	SelectTrackMenu(sf::RenderWindow* window); //*window for height and width
+	SelectTrackMenu(sf::RenderWindow* window); 
 	virtual ~SelectTrackMenu();
 
 	void drawMenu(sf::RenderWindow* window);
-	void selectUp(); // navigate inside menu
+	void selectUp();
 	void selectDown();
 	int next();
 	int previous();
@@ -18,8 +18,7 @@ public:
 	int selectedIndex;
 	int selectedTrackIndex;
 
-	std::map<std::string, sf::Texture* > textures; //name of texture and texture itself, easy to navigate
-
+	std::map<std::string, sf::Texture* > textures; 
 
 private:
 

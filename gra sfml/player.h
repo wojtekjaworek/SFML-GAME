@@ -12,13 +12,13 @@ class Player
 private:
 	sf::Sprite sprite;
 	sf::Texture texture;
-	std::map<std::string, sf::Texture* > textures; //name of texture and texture itself, easy to navigate
+	std::map<std::string, sf::Texture* > textures; 
 
 
 	float movementSpeed;
 	int textureIndex;
 
-	//functions
+	
 	void initTexture();
 	void initSprite();
 	void initPosition(sf::RenderWindow* window);
@@ -33,12 +33,11 @@ public:
 
 
 
-	//accessor
+	
 	const sf::FloatRect getBounds();
 	const sf::Sprite getSprite();
 
 
-	//functions
 	sf::Vector2f getPos();
 	void move(const float dirX, const float dirY);
 	void update(int textureIndex);

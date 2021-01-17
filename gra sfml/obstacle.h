@@ -13,19 +13,19 @@ private:
 
 
 	sf::Vector2f direction;
-	float movementSpeed; // speed of obstacles 
+	float movementSpeed; 
 
 public:
 	Obstacle(sf::Texture* texture, float posX, float posY, float dirX, float dirY, float movementSpeed);
 	virtual ~Obstacle();
 
 
-	//accessor
+	
 	const sf::FloatRect getBounds();
 	const sf::Vector2f getPos();
 	const float getSpeed();
 	
-	//functions
+	
 	void update();
 	void render(sf::RenderTarget* target);
 	void setNewTexture(sf::Texture* texture, bool resetRect);

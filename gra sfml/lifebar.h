@@ -12,7 +12,7 @@ private:
 
 
 
-	//funkcje
+	
 	void initTextures();
 	void initSprite();
 	void initPosition();

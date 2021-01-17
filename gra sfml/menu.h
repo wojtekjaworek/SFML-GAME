@@ -6,12 +6,12 @@ class Menu
 
 public:
 
-	Menu(sf::RenderWindow *window); //*window for height and width
+	Menu(sf::RenderWindow *window); 
 	virtual ~Menu();
 
 	void drawMenu(sf::RenderWindow* window);
 
-	void selectUp(); // navigate inside menu
+	void selectUp(); 
 	void selectDown();
 	int selectedIndex;
 
@@ -21,7 +21,7 @@ private:
 
 
 	sf::Font menuFont;
-	sf::Text menuOptions[6]; // three different options in main menu: start game, select track, select car, select diff level, informations
+	sf::Text menuOptions[6]; 
 	sf::FloatRect bounds[6];
 };
 

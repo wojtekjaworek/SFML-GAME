@@ -6,11 +6,11 @@ class SelectCarMenu
 {
 
 public:
-	SelectCarMenu(sf::RenderWindow* window); //*window for height and width
+	SelectCarMenu(sf::RenderWindow* window); 
 	virtual ~SelectCarMenu();
 
 	void drawMenu(sf::RenderWindow* window);
-	void selectUp(); // navigate inside menu
+	void selectUp(); 
 	void selectDown();
 	int next();
 	int previous();
@@ -19,7 +19,7 @@ public:
 	int selectedIndex;
 	int selectedCarIndex;
 
-	std::map<std::string, sf::Texture* > textures; //name of texture and texture itself, easy to navigate
+	std::map<std::string, sf::Texture* > textures; 
 
 
 private:

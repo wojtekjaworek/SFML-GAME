@@ -1,72 +1,13 @@
-﻿  game.cpp
-C:\Users\jawor\source\repos\SFML-project\gra sfml\game.cpp(604,59): warning C4838: konwersja z „T” do „int” wymaga konwersji zawężającej
+﻿  obstacle.cpp
+  player.cpp
+C:\Users\jawor\source\repos\SFML-project\gra sfml\player.cpp(40,46): warning C4244: "argument": konwersja z "T" do "float", możliwa utrata danych
           with
           [
               T=unsigned int
           ]
-C:\Users\jawor\source\repos\SFML-project\gra sfml\game.cpp(604,94): warning C4838: konwersja z „T” do „int” wymaga konwersji zawężającej
-          with
-          [
-              T=unsigned int
-          ]
-C:\Users\jawor\source\repos\SFML-project\gra sfml\game.cpp(604,129): warning C4838: konwersja z „T” do „int” wymaga konwersji zawężającej
-          with
-          [
-              T=unsigned int
-          ]
-C:\Users\jawor\source\repos\SFML-project\gra sfml\game.cpp(624,112): warning C4244: "argument": konwersja z "int" do "float", możliwa utrata danych
-C:\Users\jawor\source\repos\SFML-project\gra sfml\game.cpp(633,160): warning C4244: "=": konwersja z "float" do "int", możliwa utrata danych
-C:\Users\jawor\source\repos\SFML-project\gra sfml\game.cpp(663,162): warning C4244: "=": konwersja z "float" do "int", możliwa utrata danych
-C:\Users\jawor\source\repos\SFML-project\gra sfml\game.cpp(669,112): warning C4244: "argument": konwersja z "int" do "float", możliwa utrata danych
-C:\Users\jawor\source\repos\SFML-project\gra sfml\game.cpp(935,68): warning C4244: "=": konwersja z "_Ty" do "int", możliwa utrata danych
-          with
-          [
-              _Ty=float
-          ]
-C:\Users\jawor\source\repos\SFML-project\gra sfml\game.cpp(936,70): warning C4244: "=": konwersja z "_Ty" do "int", możliwa utrata danych
-          with
-          [
-              _Ty=float
-          ]
-C:\Users\jawor\source\repos\SFML-project\gra sfml\game.cpp(937,71): warning C4244: "=": konwersja z "_Ty" do "int", możliwa utrata danych
-          with
-          [
-              _Ty=float
-          ]
-C:\Users\jawor\source\repos\SFML-project\gra sfml\game.cpp(939,59): warning C4244: "=": konwersja z "_Ty" do "int", możliwa utrata danych
-          with
-          [
-              _Ty=float
-          ]
-C:\Users\jawor\source\repos\SFML-project\gra sfml\game.cpp(940,61): warning C4244: "=": konwersja z "_Ty" do "int", możliwa utrata danych
-          with
-          [
-              _Ty=float
-          ]
-C:\Users\jawor\source\repos\SFML-project\gra sfml\game.cpp(941,56): warning C4244: "=": konwersja z "_Ty" do "int", możliwa utrata danych
-          with
-          [
-              _Ty=float
-          ]
-C:\Users\jawor\source\repos\SFML-project\gra sfml\game.cpp(1173,67): warning C4244: "=": konwersja z "_Ty" do "int", możliwa utrata danych
-          with
-          [
-              _Ty=float
-          ]
-C:\Users\jawor\source\repos\SFML-project\gra sfml\game.cpp(1175,69): warning C4244: "=": konwersja z "_Ty" do "int", możliwa utrata danych
-          with
-          [
-              _Ty=float
-          ]
-C:\Users\jawor\source\repos\SFML-project\gra sfml\game.cpp(1177,70): warning C4244: "=": konwersja z "_Ty" do "int", możliwa utrata danych
-          with
-          [
-              _Ty=float
-          ]
-C:\Users\jawor\source\repos\SFML-project\gra sfml\game.cpp(1216,12): warning C4244: "argument": konwersja z "time_t" do "unsigned int", możliwa utrata danych
   Trwa generowanie kodu
-  1 of 719 functions ( 0.1%) were compiled, the rest were copied from previous compilation.
+  0 of 708 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    9 functions had inline decision re-evaluated but remain unchanged
+    0 functions had inline decision re-evaluated but remain unchanged
   Zakończono generowanie kodu
   gra sfml.vcxproj -> C:\Users\jawor\source\repos\SFML-project\x64\Release\gra sfml.exe

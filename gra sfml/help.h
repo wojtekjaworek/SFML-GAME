@@ -6,7 +6,7 @@ class Help
 {
 
 public:
-	Help(sf::RenderWindow* window); //*window for height and width
+	Help(sf::RenderWindow* window); 
 	virtual ~Help();
 
 	void drawMenu(sf::RenderWindow* window);

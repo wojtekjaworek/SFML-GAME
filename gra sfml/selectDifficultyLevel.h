@@ -6,11 +6,11 @@ class SelectDifficultyLevel
 {
 
 public:
-	SelectDifficultyLevel(sf::RenderWindow* window); //*window for height and width
+	SelectDifficultyLevel(sf::RenderWindow* window); 
 	virtual ~SelectDifficultyLevel();
 
 	void drawMenu(sf::RenderWindow* window);
-	void selectUp(); // navigate inside menu
+	void selectUp(); 
 	void selectDown();
 	int selectLeft();
 	int selectRight();

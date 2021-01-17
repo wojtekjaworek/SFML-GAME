@@ -30,7 +30,7 @@ void Player::initSprite()
 {
 	this->sprite.setTexture(*this->textures["PLAYER" + std::to_string(this->textureIndex)]);
 
-	//resize the sprite, original texture will be high resolution, so it have to fit on the screen and keep desired size
+	
 	this->sprite.scale(1.f, 1.f);
 
 }
@@ -41,7 +41,7 @@ void Player::initPosition(sf::RenderWindow* window)
 }
 
 
-//accessor
+
 const sf::FloatRect Player::getBounds()
 {
 	return this->sprite.getGlobalBounds();
@@ -53,7 +53,7 @@ const sf::Sprite Player::getSprite()
 }
 
 
-//public functions
+
 
 sf::Vector2f Player::getPos()
 {
@@ -80,12 +80,12 @@ void Player::render(sf::RenderTarget& target)
 
 
 
-//constructor & destructor
+
 Player::Player(sf::RenderWindow *window)
 {
 
 	this->movementSpeed = 10.f;
-	this->initTexture(); //before initSprite!!
+	this->initTexture(); 
 	this->initSprite();
 	this->initPosition(window);
 

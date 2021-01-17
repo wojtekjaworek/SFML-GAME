@@ -31,11 +31,6 @@ void Game::initTextures()
 
 
 
-	
-	this->textures["EXPLOSION"] = new sf::Texture();
-	this->textures["EXPLOSION"]->loadFromFile("textures/EXPLOSION.png");
-
-
 	for (int i = 0;i < 4;i++) { // number of tracks in folder
 
 		this->textures["TRACK" + std::to_string(i)] = new sf::Texture();

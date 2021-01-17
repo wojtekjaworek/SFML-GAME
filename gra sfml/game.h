@@ -39,7 +39,6 @@ private:
 
 	sf::Sprite background;
 
-	std::vector<sf::Sprite*> explosions;
 
 	Menu* mainMenu;
 	bool mainMenuFlag = true;
@@ -102,7 +101,7 @@ private:
 	bool isDataLoaded = false;
 
 
-	//player 
+	
 	Player* player; 
 
 	
@@ -131,7 +130,7 @@ private:
 
 
 
-	//ZMIENNE DO TESTOWYCH FUNKCJI
+	
 
 	int numberOfUnlockedCars = 0;
 	int numberOfUnlockedTracks = 0;
@@ -147,11 +146,11 @@ private:
 
 
 
-	//private functions
+	
 	void initWindow();
 	void initTextures();
-	void initFonts(); // initialize other stuff like fonts etc.
-	void initPlayer(sf::RenderWindow *window); // textureIndex is the same as selectedCar
+	void initFonts(); 
+	void initPlayer(sf::RenderWindow *window); 
 	void initMainMenu();
 	void initPauseMenu();
 	void initSelectDifficultyLevel();
@@ -174,7 +173,7 @@ public:
 
 
 
-	//public functions
+	
 	int run();
 
 	
@@ -204,7 +203,7 @@ public:
 	void pauseGame();
 	void resumeGame();
 
-	//TESTOWE FUNKCJE
+	
 
 	void gameProgress();
 	void initLoadedVariables();
