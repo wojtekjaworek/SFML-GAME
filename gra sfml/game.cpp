@@ -92,7 +92,7 @@ void Game::initHelp()
 
 void Game::initClocks()
 {
-
+	  
 	this->obstacleSpawnClock.restart();
 	this->movementSpeedClock.restart();
 	this->lifeClock.restart();
