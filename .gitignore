@@ -1,4 +1,4 @@
-.vs
-x64
+.vs/
+x64/
 gra sfml.sln
-gra sfml/x64
+gra sfml/x64/
