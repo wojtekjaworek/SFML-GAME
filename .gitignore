@@ -1,3 +1,4 @@
 .vs
 x64
 gra sfml.sln
+gra sfml/x64

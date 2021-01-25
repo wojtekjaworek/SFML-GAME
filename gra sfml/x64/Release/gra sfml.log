@@ -1,9 +1,75 @@
-﻿  obstacle.cpp
-  player.cpp
-C:\Users\jawor\source\repos\SFML-project\gra sfml\player.cpp(40,46): warning C4244: "argument": konwersja z "T" do "float", możliwa utrata danych
+﻿  gameOver.cpp
+C:\Users\jawor\source\repos\SFML-project\gra sfml\gameOver.cpp(18,97): warning C4244: "argument": konwersja z "T" do "T", możliwa utrata danych
           with
           [
               T=unsigned int
+          ]
+          and
+          [
+              T=float
+          ]
+C:\Users\jawor\source\repos\SFML-project\gra sfml\gameOver.cpp(18,68): warning C4244: "argument": konwersja z "T" do "T", możliwa utrata danych
+          with
+          [
+              T=unsigned int
+          ]
+          and
+          [
+              T=float
+          ]
+C:\Users\jawor\source\repos\SFML-project\gra sfml\gameOver.cpp(25,97): warning C4244: "argument": konwersja z "T" do "T", możliwa utrata danych
+          with
+          [
+              T=unsigned int
+          ]
+          and
+          [
+              T=float
+          ]
+C:\Users\jawor\source\repos\SFML-project\gra sfml\gameOver.cpp(25,68): warning C4244: "argument": konwersja z "T" do "T", możliwa utrata danych
+          with
+          [
+              T=unsigned int
+          ]
+          and
+          [
+              T=float
+          ]
+C:\Users\jawor\source\repos\SFML-project\gra sfml\gameOver.cpp(32,97): warning C4244: "argument": konwersja z "T" do "T", możliwa utrata danych
+          with
+          [
+              T=unsigned int
+          ]
+          and
+          [
+              T=float
+          ]
+C:\Users\jawor\source\repos\SFML-project\gra sfml\gameOver.cpp(32,68): warning C4244: "argument": konwersja z "T" do "T", możliwa utrata danych
+          with
+          [
+              T=unsigned int
+          ]
+          and
+          [
+              T=float
+          ]
+C:\Users\jawor\source\repos\SFML-project\gra sfml\gameOver.cpp(39,97): warning C4244: "argument": konwersja z "T" do "T", możliwa utrata danych
+          with
+          [
+              T=unsigned int
+          ]
+          and
+          [
+              T=float
+          ]
+C:\Users\jawor\source\repos\SFML-project\gra sfml\gameOver.cpp(39,68): warning C4244: "argument": konwersja z "T" do "T", możliwa utrata danych
+          with
+          [
+              T=unsigned int
+          ]
+          and
+          [
+              T=float
           ]
   Trwa generowanie kodu
   0 of 708 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
