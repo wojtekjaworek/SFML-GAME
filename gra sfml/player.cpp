@@ -91,8 +91,10 @@ Player::Player(sf::RenderWindow *window)
 
 }
 
+
+
 Player::~Player()
-{ 
+{   
 
 	for (auto& i : this->textures) {
 		delete i.second;
